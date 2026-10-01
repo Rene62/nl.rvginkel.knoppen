@@ -1,0 +1,30 @@
+{
+    "title": {
+        "en": "Yes/No button [[button]] is pressed",
+        "nl": "Ja/Nee-knop [[button]] is ingedrukt"
+    },
+    "titleFormatted": {
+        "en": "Yes/No button [[button]] is pressed",
+        "nl": "Ja/Nee-knop [[button]] is ingedrukt"
+    },
+    "args": [
+        {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+                "en": "Button",
+                "nl": "Knop"
+            }
+        }
+    ],
+    "tokens": [
+        {
+            "name": "buttonValue",
+            "type": "boolean",
+            "title": {
+                "en": "Button Yes/No",
+                "nl": "Knop Ja/Nee"
+            }
+        }
+    ]
+}

@@ -1,0 +1,175 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    background: transparent !important;
+
+}
+
+body {
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    padding: 5px 4px 9px 4px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+
+
+.button-text {
+    min-width: 0;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+
+.status-on {
+    background: #24c75a;
+}
+
+
+.status-off {
+    background: #e34b4b;
+}
+
+#buttonContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    background: transparent;
+}
+
+
+.button-small {
+    width: calc(50% - 4px);
+}
+
+.button-large {
+    width: 100%;
+}
+
+.panel-button.button-disabled {
+    position: relative;
+    opacity: 0.45;
+    cursor: default;
+}
+
+.status-dot {
+    display: inline-block;
+
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
+
+    border-radius: 50%;
+    margin-right: 8px;
+    flex-shrink: 0;
+
+    border: 1px solid rgba(0, 0, 0, 0.30);
+
+    box-shadow:
+        inset 0 3px 3px rgba(255, 255, 255, 0.40),
+        inset 0 -3px 3px rgba(0, 0, 0, 0.30),
+        0 2px 3px rgba(0, 0, 0, 0.30);
+}
+
+.status-dot.status-on {
+    background: rgb(3, 245, 3);
+}
+
+.status-dot.status-off {
+    background: red;
+}
+
+.panel-button {
+    box-sizing: border-box;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 42px;
+    padding: 0 22px;
+
+    border: none;
+    border-radius: 999px;
+
+    background: #303038;
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+
+    -webkit-tap-highlight-color: transparent;
+
+    cursor: pointer;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.16),
+        0 2px 0 rgba(0, 0, 0, 0.35),
+        0 4px 6px rgba(0, 0, 0, 0.18);
+
+    transform: translateY(0);
+
+    transition:
+        transform 80ms ease,
+        box-shadow 80ms ease;
+
+
+}
+
+
+.lightloop-svg {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: visible;
+    pointer-events: none;
+}
+
+.lightloop-path {
+    fill: none;
+    stroke: var(--lightloop-color, #00ff66);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.panel-button:active:not(:disabled) {
+    transform: translateY(3px);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 0 rgba(0, 0, 0, 0),
+        0 1px 2px rgba(0, 0, 0, 0.18);
+}
+
+
+.button-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.button-delete {
+    margin-left: 16px;
+}

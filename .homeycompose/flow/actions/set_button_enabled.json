@@ -1,0 +1,44 @@
+{
+    "title": {
+        "en": "Enable or disable button",
+        "nl": "Knop in- of uitschakelen"
+    },
+    "titleFormatted": {
+        "en": "Set [[button]] to [[enabled]]",
+        "nl": "Zet [[button]] op [[enabled]]"
+    },
+    "args": [
+        {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+                "en": "Button",
+                "nl": "Knop"
+            }
+        },
+        {
+            "name": "enabled",
+            "type": "dropdown",
+            "title": {
+                "en": "Status",
+                "nl": "Status"
+            },
+            "values": [
+                {
+                    "id": "true",
+                    "title": {
+                        "en": "Enabled",
+                        "nl": "Ingeschakeld"
+                    }
+                },
+                {
+                    "id": "false",
+                    "title": {
+                        "en": "Disabled",
+                        "nl": "Uitgeschakeld"
+                    }
+                }
+            ]
+        }
+    ]
+}

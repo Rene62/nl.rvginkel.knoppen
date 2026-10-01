@@ -1,0 +1,129 @@
+{
+    "id": "buttons",
+    "name": {
+        "en": "Button",
+        "nl": "Knop"
+    },
+    "description": {
+        "en": "Create dashboard buttons and use them in a Flow.",
+        "nl": "Maak dashboard knoppen en gebruik deze in een Flow."
+    },
+    "transparent": true,
+    "api": {
+        "getBooleanValue": {
+            "method": "GET",
+            "path": "/boolean"
+        },
+        "getButtons": {
+            "method": "GET",
+            "path": "/buttons"
+        },
+        "triggerActionButton": {
+            "method": "POST",
+            "path": "/trigger-action-button"
+        },
+        "triggerBooleanButton": {
+            "method": "POST",
+            "path": "/trigger-boolean-button"
+        }
+    },
+    "settings": [
+        {
+            "id": "button1",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 1",
+                "nl": "Positie 1"
+            }
+        },
+        {
+            "id": "button2",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 2",
+                "nl": "Positie 2"
+            }
+        },
+        {
+            "id": "button3",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 3",
+                "nl": "Positie 3"
+            }
+        },
+        {
+            "id": "button4",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 4",
+                "nl": "Positie 4"
+            }
+        },
+        {
+            "id": "button5",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 5",
+                "nl": "Positie 5"
+            }
+        },
+        {
+            "id": "button6",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 6",
+                "nl": "Positie 6"
+            }
+        },
+        {
+            "id": "button7",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 7",
+                "nl": "Positie 7"
+            }
+        },
+        {
+            "id": "button8",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 8",
+                "nl": "Positie 8"
+            }
+        },
+        {
+            "id": "button9",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 9",
+                "nl": "Positie 9"
+            }
+        },
+        {
+            "id": "button10",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 10",
+                "nl": "Positie 10"
+            }
+        },
+        {
+            "id": "button11",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 11",
+                "nl": "Positie 11"
+            }
+        },
+        {
+            "id": "button12",
+            "type": "autocomplete",
+            "title": {
+                "en": "Position 12",
+                "nl": "Positie 12"
+            }
+        }
+    ],
+    "height": 70
+}

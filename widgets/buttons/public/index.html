@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+
+    <div id="buttonContainer"></div>
+
+    <script>
+        async function onHomeyReady(Homey) {
+
+
+
+            const buttonContainer =
+                document.getElementById('buttonContainer');
+
+
+            Homey.on(
+                'buttonLightloop',
+                data => {
+
+                    const buttonElement =
+                        buttonContainer.querySelector(
+                            `[data-button-id="${data.buttonId}"]`
+                        );
+
+                    if (!buttonElement) {
+                        return;
+                    }
+
+                    buttonElement.style.setProperty(
+                        '--lightloop-color',
+                        data.color
+                    );
+
+                    const lightloopPathTop =
+                        buttonElement.querySelector(
+                            '.lightloop-path-top'
+                        );
+
+                    const lightloopPathBottom =
+                        buttonElement.querySelector(
+                            '.lightloop-path-bottom'
+                        );
+
+                    if (
+                        !lightloopPathTop ||
+                        !lightloopPathBottom
+                    ) {
+                        return;
+                    }
+
+                    const lightloopPaths = [
+                        lightloopPathTop,
+                        lightloopPathBottom
+                    ];
+
+                    const totalLength =
+                        lightloopPathTop.getTotalLength();
+
+                    if (!totalLength) {
+                        return;
+                    }
+
+                    const lineLength =
+                        totalLength * 0.25;
+
+                    const gapLength =
+                        totalLength - lineLength;
+
+                    lightloopPaths.forEach(
+                        lightloopPath => {
+
+                            lightloopPath.setAttribute(
+                                'stroke-dasharray',
+                                `${lineLength} ${gapLength}`
+                            );
+                        }
+                    );
+
+                    const pixelsPerSecond = 140;
+
+                    const totalDuration =
+                        data.duration * 1000;
+
+                    const startTime =
+                        performance.now();
+
+                    lightloopPaths.forEach(
+                        lightloopPath => {
+                            lightloopPath.style.display = '';
+                        }
+                    );
+
+                    function animateLightloop(now) {
+
+                        const elapsed =
+                            now - startTime;
+
+                        if (elapsed >= totalDuration) {
+
+                            lightloopPaths.forEach(
+                                lightloopPath => {
+                                    lightloopPath.style.display =
+                                        'none';
+                                }
+                            );
+
+                            return;
+                        }
+
+                        const travelled =
+                            (elapsed / 1000) *
+                            pixelsPerSecond;
+
+                        const offset =
+                            -(travelled % totalLength);
+
+                        const secondLineOffset =
+                            totalLength * 0.5;
+
+                        lightloopPathTop.setAttribute(
+                            'stroke-dashoffset',
+                            offset
+                        );
+
+                        lightloopPathBottom.setAttribute(
+                            'stroke-dashoffset',
+                            offset - secondLineOffset
+                        );
+
+                        requestAnimationFrame(
+                            animateLightloop
+                        );
+                    }
+
+                    requestAnimationFrame(
+                        animateLightloop
+                    );
+                }
+            );
+
+            Homey.on(
+                'buttonEnabledChanged',
+                data => {
+
+                    const buttonElement =
+                        buttonContainer.querySelector(
+                            `[data-button-id="${data.buttonId}"]`
+                        );
+
+                    if (!buttonElement) {
+                        return;
+                    }
+
+                    buttonElement.disabled =
+                        data.enabled === false;
+
+                    buttonElement.classList.toggle(
+                        'button-disabled',
+                        data.enabled === false
+                    );
+                }
+            );
+
+            Homey.on(
+
+                'booleanVariableChanged',
+                data => {
+
+                    const booleanButtons =
+                        buttonContainer.querySelectorAll(
+                            '[data-variable-id]'
+                        );
+
+                    booleanButtons.forEach(
+                        buttonElement => {
+
+                            if (
+                                buttonElement.dataset.variableId !==
+                                data.variableId
+                            ) {
+                                return;
+                            }
+
+                            const statusDot =
+                                buttonElement.querySelector(
+                                    '.status-dot'
+                                );
+
+                            if (!statusDot) {
+                                return;
+                            }
+
+                            statusDot.classList.remove(
+                                'status-on',
+                                'status-off'
+                            );
+
+                            if (data.value === true) {
+                                statusDot.classList.add(
+                                    'status-on'
+                                );
+                            } else {
+                                statusDot.classList.add(
+                                    'status-off'
+                                );
+                            }
+                        }
+                    );
+                }
+            );
+
+            try {
+
+                const allButtons = await Homey.api(
+                    'GET',
+                    '/buttons'
+                );
+
+                const settings =
+                    Homey.getSettings();
+
+                const selectedButtonIds = [
+                    settings.button1?.id,
+                    settings.button2?.id,
+                    settings.button3?.id,
+                    settings.button4?.id,
+                    settings.button5?.id,
+                    settings.button6?.id,
+                    settings.button7?.id,
+                    settings.button8?.id,
+                    settings.button9?.id,
+                    settings.button10?.id,
+                    settings.button11?.id,
+                    settings.button12?.id
+                ].filter(Boolean);
+
+                const buttons =
+                    selectedButtonIds
+                        .map(buttonId =>
+                            allButtons.find(
+                                button =>
+                                    button.id === buttonId
+                            )
+                        )
+                        .filter(Boolean);
+
+                buttonContainer.innerHTML = '';
+                if (buttons.length === 0) {
+
+                    buttonContainer.textContent =
+                        Homey.__('widget.add_button');
+
+                    Homey.ready({
+                        height: 58
+                    });
+
+                    return;
+                }
+
+                buttons.forEach(button => {
+
+                    const buttonElement =
+                        document.createElement('button');
+
+                    buttonElement.type = 'button';
+                    buttonElement.dataset.buttonId =
+                        button.id;
+
+                    if (button.type === 'boolean') {
+
+                        const statusDot =
+                            document.createElement('span');
+
+                        statusDot.classList.add(
+                            'status-dot'
+                        );
+
+                        const textElement =
+                            document.createElement('span');
+
+                        textElement.textContent =
+                            button.text || Homey.__('widget.button_fallback');
+
+                        buttonElement.appendChild(
+                            statusDot
+                        );
+
+                        buttonElement.appendChild(
+                            textElement
+                        );
+
+                    } else {
+
+                        buttonElement.textContent =
+                            button.text || Homey.__('widget.button_fallback');
+                    }
+
+                    buttonElement.classList.add(
+                        'panel-button'
+                    );
+
+                    const lightloopSvg =
+                        document.createElementNS(
+                            'http://www.w3.org/2000/svg',
+                            'svg'
+                        );
+
+
+                    lightloopSvg.classList.add(
+                        'lightloop-svg'
+                    );
+
+
+
+                    const lightloopPathTop =
+                        document.createElementNS(
+                            'http://www.w3.org/2000/svg',
+                            'path'
+                        );
+
+                    const lightloopPathBottom =
+                        document.createElementNS(
+                            'http://www.w3.org/2000/svg',
+                            'path'
+                        );
+
+                    [
+                        lightloopPathTop,
+                        lightloopPathBottom
+                    ].forEach(lightloopPath => {
+
+                        lightloopPath.classList.add(
+                            'lightloop-path'
+                        );
+
+                        lightloopPath.style.display =
+                            'none';
+
+                        lightloopSvg.appendChild(
+                            lightloopPath
+                        );
+                    });
+
+                    lightloopPathTop.classList.add(
+                        'lightloop-path-top'
+                    );
+
+                    lightloopPathBottom.classList.add(
+                        'lightloop-path-bottom'
+                    );
+
+                    buttonElement.appendChild(
+                        lightloopSvg
+                    );
+
+                    if (button.width === 'large') {
+
+                        buttonElement.classList.add(
+                            'button-large'
+                        );
+
+                    } else {
+
+                        buttonElement.classList.add(
+                            'button-small'
+                        );
+                    }
+                    if (button.enabled === false) {
+                        buttonElement.disabled = true;
+                        buttonElement.classList.add('button-disabled');
+                    }
+
+
+                    // Klik op actieknop
+                    if (button.type === 'action') {
+
+                        buttonElement.addEventListener(
+                            'click',
+                            async () => {
+
+                                try {
+
+                                    await Homey.api(
+                                        'POST',
+                                        '/trigger-action-button',
+                                        {
+                                            buttonId: button.id
+                                        }
+                                    );
+
+                                } catch (error) {
+
+                                    console.error(
+                                        `Fout bij uitvoeren actieknop "${button.text}":`,
+                                        error
+                                    );
+                                }
+                            }
+                        );
+                    }
+
+                    if (button.type === 'boolean') {
+
+                        buttonElement.addEventListener(
+                            'click',
+                            async () => {
+
+                                try {
+
+                                    await Homey.api(
+                                        'POST',
+                                        '/trigger-boolean-button',
+                                        {
+                                            buttonId: button.id
+                                        }
+                                    );
+
+                                } catch (error) {
+
+                                    console.error(
+                                        `Fout bij uitvoeren Ja/Nee-knop "${button.text}":`,
+                                        error
+                                    );
+                                }
+                            }
+                        );
+                    }
+
+
+                    buttonContainer.appendChild(
+                        buttonElement
+                    );
+
+
+                    const buttonWidth =
+                        buttonElement.offsetWidth;
+
+                    const buttonHeight =
+                        buttonElement.offsetHeight;
+
+                    lightloopSvg.setAttribute(
+                        'viewBox',
+                        `0 0 ${buttonWidth} ${buttonHeight}`
+                    );
+
+                    const inset = 1.5;
+
+                    const left =
+                        inset;
+
+                    const right =
+                        buttonWidth - inset;
+
+                    const top =
+                        inset;
+
+                    const bottom =
+                        buttonHeight - inset;
+
+                    const radius =
+                        (bottom - top) / 2;
+
+                    const centerY =
+                        buttonHeight / 2;
+
+                    const pathData = [
+                        `M ${left + radius} ${top}`,
+                        `H ${right - radius}`,
+                        `A ${radius} ${radius} 0 0 1 ${right} ${centerY}`,
+                        `A ${radius} ${radius} 0 0 1 ${right - radius} ${bottom}`,
+                        `H ${left + radius}`,
+                        `A ${radius} ${radius} 0 0 1 ${left} ${centerY}`,
+                        `A ${radius} ${radius} 0 0 1 ${left + radius} ${top}`,
+                        'Z'
+                    ].join(' ');
+
+                    [
+                        lightloopPathTop,
+                        lightloopPathBottom
+                    ].forEach(lightloopPath => {
+
+                        lightloopPath.setAttribute(
+                            'd',
+                            pathData
+                        );
+                    });
+
+                    if (
+                        button.type === 'boolean' &&
+                        button.variableId
+                    ) {
+                        buttonElement.dataset.variableId =
+                            button.variableId;
+
+                        Homey.api(
+                            'GET',
+                            `/boolean?variableId=${encodeURIComponent(button.variableId)}`
+                        )
+                            .then(result => {
+
+                                const statusDot =
+                                    buttonElement.querySelector(
+                                        '.status-dot'
+                                    );
+
+                                if (!statusDot) {
+                                    return;
+                                }
+
+                                if (result.value === true) {
+
+                                    statusDot.classList.add(
+                                        'status-on'
+                                    );
+
+                                } else {
+
+                                    statusDot.classList.add(
+                                        'status-off'
+                                    );
+                                }
+                            })
+                            .catch(error => {
+
+                                console.error(
+                                    `Fout bij ophalen boolean voor "${button.text}":`,
+                                    error
+                                );
+                            });
+                    }
+                });
+
+                let rows = 0;
+                let halfRowUsed = false;
+
+                buttons.forEach(button => {
+
+                    if (button.width === 'large') {
+
+                        if (halfRowUsed) {
+                            rows++;
+                            halfRowUsed = false;
+                        }
+
+                        rows++;
+
+                    } else {
+
+                        if (halfRowUsed) {
+                            rows++;
+                            halfRowUsed = false;
+                        } else {
+                            halfRowUsed = true;
+                        }
+                    }
+                });
+
+                if (halfRowUsed) {
+                    rows++;
+                }
+
+                Homey.ready({
+                    height: rows * 58
+                });
+            } catch (error) {
+
+                console.error(
+                    'Fout bij laden centrale knoppen:',
+                    error
+                );
+
+                buttonContainer.textContent =
+                    Homey.__('widget.error', { message: error.message });
+
+                Homey.ready({
+                    height: 58
+                });
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>

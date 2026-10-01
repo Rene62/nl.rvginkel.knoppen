@@ -1,0 +1,56 @@
+{
+  "settings": {
+    "title": "Knoppen",
+    "subtitle": "Beheer de knoppen voor je dashboard.",
+    "loading_buttons": "Knoppen laden...",
+    "new_button": "+ Nieuwe knop",
+    "load_boolean_variables_error": "Fout bij laden van Ja/Nee-variabelen.",
+    "load_buttons_error": "Fout bij laden van knoppen.",
+    "no_buttons": "Er zijn nog geen knoppen.",
+    "button_name": "Knop __number__: __text__",
+    "button_fallback": "Knop",
+    "delete": "Verwijderen",
+    "delete_confirm": "Knop \"__name__\" verwijderen?\n\nLet op: Deze knop wordt niet meer getoond in widgets.\nKies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.",
+    "delete_error": "Verwijderen mislukt: __error__",
+    "type": "Type",
+    "type_action": "Actie",
+    "type_boolean": "Ja/Nee",
+    "text": "Tekst",
+    "width": "Breedte",
+    "width_small": "Smal",
+    "width_large": "Breed",
+    "action_value": "Actiewaarde",
+    "boolean_variable": "Ja/Nee-variabele",
+    "select_variable": "Selecteer een variabele...",
+    "save": "Opslaan",
+    "save_changed": "Opslaan *",
+    "save_error": "Opslaan van de knop is mislukt.",
+    "save_success": "Knop is opgeslagen.",
+    "new_button_default": "Nieuwe knop",
+    "create_error": "Aanmaken van de knop is mislukt."
+  },
+  "widget": {
+    "add_button": "Voeg een knop toe",
+    "button_fallback": "Knop"
+  },
+  "autocomplete": {
+    "button_name": "Knop __number__: __text__",
+    "empty": "— Leeg —",
+    "empty_deleted": "⚠ — Leeg — (knop verwijderd)"
+  },
+  "errors": {
+    "button_not_found": "Knop niet gevonden",
+    "button_id_not_found": "Knop met ID \"__id__\" niet gevonden",
+    "not_action_button": "Knop \"__name__\" is geen actieknop",
+    "not_boolean_button": "Knop \"__name__\" is geen Ja/Nee-knop",
+    "no_boolean_variable": "Knop \"__name__\" heeft geen Ja/Nee-variabele",
+    "boolean_variable_not_found": "Ja/Nee-variabele van knop \"__name__\" niet gevonden",
+    "variable_not_boolean": "Variabele van knop \"__name__\" is geen Ja/Nee-variabele",
+    "no_button_id": "Geen button ID opgegeven",
+    "no_boolean_variable_specified": "Geen boolean variabele opgegeven",
+    "selected_variable_not_found": "Boolean variabele niet gevonden",
+    "selected_variable_not_boolean": "Geselecteerde variabele is geen boolean",
+    "invalid_button_type": "Ongeldig knoptype: \"__type__\"",
+    "invalid_button_width": "Ongeldige knopbreedte: \"__width__\""
+  }
+}

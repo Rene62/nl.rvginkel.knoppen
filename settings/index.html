@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+
+    <script type="text/javascript" src="/homey.js" data-origin="settings">
+    </script>
+
+    <style>
+        .button-title-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .button-delete {
+            margin-left: 16px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header class="homey-header">
+        <h1 class="homey-title">
+            Knoppen
+        </h1>
+
+        <p class="homey-subtitle">
+            Beheer de knoppen voor je dashboard.
+        </p>
+    </header>
+
+
+
+    <div id="buttonList">
+        Knoppen laden...
+    </div>
+
+    <div class="homey-form-group">
+        <button id="addButton" class="homey-button-primary-full">
+            + Nieuwe knop
+        </button>
+    </div>
+
+    <script>
+
+
+        function onHomeyReady(Homey) {
+
+            const buttonList =
+                document.getElementById('buttonList');
+
+            const addButton =
+                document.getElementById('addButton');
+            let booleanVariables = [];
+
+
+
+
+            /*
+             * Alle knoppen laden
+             */function loadButtons() {
+
+                Homey.api(
+                    'GET',
+                    '/boolean-variables',
+                    null,
+                    function (error, variables) {
+
+                        if (error) {
+
+                            console.error(
+                                'Fout bij ophalen Ja/Nee-variabelen:',
+                                error
+                            );
+
+                            buttonList.textContent =
+                                'Fout bij laden van Ja/Nee-variabelen.';
+
+                            return;
+                        }
+
+                        booleanVariables =
+                            Array.isArray(variables)
+                                ? variables
+                                : [];
+
+
+                        Homey.api(
+                            'GET',
+                            '/buttons',
+                            null,
+                            function (error, buttons) {
+
+                                if (error) {
+                                    console.error(error);
+
+                                    buttonList.textContent =
+                                        'Fout bij laden van knoppen.';
+
+                                    return;
+                                }
+
+
+                                if (!Array.isArray(buttons) ||
+                                    buttons.length === 0) {
+
+                                    buttonList.textContent =
+                                        'Er zijn nog geen knoppen.';
+
+                                    return;
+                                }
+
+
+                                buttonList.innerHTML = '';
+
+
+                                buttons.forEach(button => {
+
+                                    createButtonEditor(button);
+                                });
+                            }
+                        );
+                    }
+                );
+            }
+
+
+            /*
+             * Editor voor één knop maken
+             */
+            function createButtonEditor(button) {
+
+                const fieldset =
+                    document.createElement('fieldset');
+
+                fieldset.className =
+                    'homey-form-fieldset';
+
+
+                /*
+                 * Titel
+                 */
+                const titleRow =
+                    document.createElement('div');
+
+                titleRow.className =
+                    'button-title-row';
+
+
+                const legendText =
+                    document.createElement('span');
+
+                legendText.className =
+                    'homey-form-legend';
+
+                legendText.textContent =
+                    `Knop ${button.number}: ${button.text || 'Knop'}`;
+
+
+                const deleteButton =
+                    document.createElement('button');
+
+                deleteButton.type = 'button';
+                deleteButton.textContent = 'Verwijderen';
+                deleteButton.className = 'button-delete';
+
+                deleteButton.addEventListener(
+                    'click',
+                    async function () {
+
+                        const confirmed = await Homey.confirm(
+                            `Knop "${button.text || 'Knop'}" verwijderen?
+
+Let op: Deze knop wordt niet meer getoond in widgets.
+Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
+                        );
+
+                        if (!confirmed) {
+                            return;
+                        }
+
+                        deleteButton.disabled = true;
+
+                        Homey.api(
+                            'DELETE',
+                            `/buttons?id=${encodeURIComponent(button.id)}`,
+                            null,
+                            function (error) {
+
+                                if (error) {
+                                    deleteButton.disabled = false;
+
+                                    console.error(
+                                        'Fout bij verwijderen knop:',
+                                        error
+                                    );
+
+                                    Homey.alert(
+                                        `Verwijderen mislukt: ${error.message || error}`
+                                    );
+
+                                    return;
+                                }
+
+                                fieldset.remove();
+                            }
+                        );
+                    }
+                );
+
+                titleRow.appendChild(legendText);
+                titleRow.appendChild(deleteButton);
+
+                fieldset.appendChild(titleRow);
+
+
+                /*
+                 * TYPE
+                 */
+                const typeGroup =
+                    document.createElement('div');
+
+                typeGroup.className =
+                    'homey-form-group';
+
+                typeGroup.innerHTML = `
+                <label class="homey-form-label">
+                    Type
+                </label>
+
+                <select class="homey-form-select type-input">
+                    <option value="action">
+                        Actie
+                    </option>
+
+                    <option value="boolean">
+                        Ja/Nee
+                    </option>
+                </select>
+            `;
+
+                const typeInput =
+                    typeGroup.querySelector('.type-input');
+
+                typeInput.value =
+                    button.type || 'action';
+
+                fieldset.appendChild(typeGroup);
+
+
+                /*
+                 * TEKST
+                 */
+                const textGroup =
+                    document.createElement('div');
+
+                textGroup.className =
+                    'homey-form-group';
+
+                textGroup.innerHTML = `
+                <label class="homey-form-label">
+                    Tekst
+                </label>
+
+                <input
+                    class="homey-form-input text-input"
+                    type="text">
+            `;
+
+                const textInput =
+                    textGroup.querySelector('.text-input');
+
+                textInput.value =
+                    button.text || '';
+
+                fieldset.appendChild(textGroup);
+
+
+                /*
+                 * BREEDTE
+                 */
+                const widthGroup =
+                    document.createElement('div');
+
+                widthGroup.className =
+                    'homey-form-group';
+
+
+                widthGroup.innerHTML = `
+    <label class="homey-form-label">
+        ${Homey.__('settings.width')}
+    </label>
+
+    <select class="homey-form-select width-input">
+
+        <option value="small">
+            ${Homey.__('settings.width_small')}
+        </option>
+
+        <option value="large">
+            ${Homey.__('settings.width_large')}
+        </option>
+
+    </select>
+`;
+
+
+
+
+
+                const widthInput =
+                    widthGroup.querySelector('.width-input');
+
+                widthInput.value =
+                    button.width || 'small';
+
+                fieldset.appendChild(widthGroup);
+
+
+                /*
+                 * ACTIEWAARDE
+                 */
+                const actionValueGroup =
+                    document.createElement('div');
+
+                actionValueGroup.className =
+                    'homey-form-group';
+
+                actionValueGroup.innerHTML = `
+                <label class="homey-form-label">
+                    Actiewaarde
+                </label>
+
+                <input
+                    class="homey-form-input action-value-input"
+                    type="text">
+            `;
+
+                const actionValueInput =
+                    actionValueGroup.querySelector(
+                        '.action-value-input'
+                    );
+
+                actionValueInput.value =
+                    button.actionValue || '';
+
+                fieldset.appendChild(actionValueGroup);
+
+                /*/*
+ * JA/NEE-VARIABELE
+ */
+                const booleanVariableGroup =
+                    document.createElement('div');
+
+                booleanVariableGroup.className =
+                    'homey-form-group';
+
+                booleanVariableGroup.innerHTML = `
+    <label class="homey-form-label">
+        Ja/Nee-variabele
+    </label>
+
+    <select
+        class="homey-form-select boolean-variable-input">
+
+        <option value="">
+            Selecteer een variabele...
+        </option>
+
+    </select>
+`;
+
+                const booleanVariableInput =
+                    booleanVariableGroup.querySelector(
+                        '.boolean-variable-input'
+                    );
+
+                fieldset.appendChild(booleanVariableGroup);
+
+
+                /*
+               * Ja/Nee-variabelen in dropdown zetten
+               */
+                booleanVariables.forEach(variable => {
+
+                    const option =
+                        document.createElement('option');
+
+                    option.value =
+                        variable.id;
+
+                    option.textContent =
+                        variable.name;
+
+                    /*
+                     * Bestaande koppeling selecteren
+                     */
+                    if (variable.id === button.variableId) {
+                        option.selected = true;
+                    }
+
+                    booleanVariableInput.appendChild(option);
+                });
+
+                function updateTypeFields() {
+
+                    if (typeInput.value === 'boolean') {
+
+                        actionValueGroup.style.display = 'none';
+                        booleanVariableGroup.style.display = '';
+
+                    } else {
+
+                        actionValueGroup.style.display = '';
+                        booleanVariableGroup.style.display = 'none';
+                    }
+                }
+
+
+                typeInput.addEventListener(
+                    'change',
+                    updateTypeFields
+                );
+
+
+                // Meteen juiste velden tonen
+                updateTypeFields();
+
+                ;
+
+
+                /*
+                 * OPSLAAN
+                 */
+                const saveButton =
+                    document.createElement('button');
+
+                saveButton.className =
+                    'homey-button-primary-full';
+
+                saveButton.textContent =
+                    'Opslaan';
+
+                let changes = false;
+                function markAsChanged(event) {
+
+                    if (
+                        event.target.matches(
+                            'input, select, textarea'
+                        )
+                    ) {
+                        changes = true;
+
+                        saveButton.textContent =
+                            'Opslaan *';
+                    }
+                }
+
+
+                fieldset.addEventListener(
+                    'input',
+                    markAsChanged
+                );
+
+                fieldset.addEventListener(
+                    'change',
+                    markAsChanged
+                );
+
+
+                saveButton.addEventListener(
+                    'click',
+                    function () {
+
+                        saveButton.disabled = true;
+
+                        Homey.api(
+                            'PUT',
+                            '/buttons',
+                            {
+                                id: button.id,
+
+                                type:
+                                    typeInput.value,
+
+                                text:
+                                    textInput.value,
+
+                                width:
+                                    widthInput.value,
+
+                                actionValue:
+                                    typeInput.value === 'action'
+                                        ? actionValueInput.value
+                                        : '',
+
+                                variableId:
+                                    typeInput.value === 'boolean'
+                                        ? booleanVariableInput.value || null
+                                        : null,
+
+                                variableName:
+                                    typeInput.value === 'boolean'
+                                        && booleanVariableInput.selectedIndex > 0
+                                        ? booleanVariableInput.options[
+                                            booleanVariableInput.selectedIndex
+                                        ].textContent
+                                        : null
+                            },
+
+                            function (error, updatedButton) {
+
+                                saveButton.disabled = false;
+
+                                if (error) {
+
+                                    console.error(
+                                        'Fout bij opslaan knop:',
+                                        error
+                                    );
+
+                                    Homey.alert(
+                                        'Opslaan van de knop is mislukt.'
+                                    );
+
+                                    return;
+                                }
+
+
+                                console.log(
+                                    'Knop opgeslagen:',
+                                    updatedButton
+                                );
+
+                                changes = false;
+
+                                saveButton.textContent =
+                                    'Opslaan';
+
+                                legendText.textContent =
+                                    `Knop ${updatedButton.number}: ${updatedButton.text || 'Knop'}`;
+
+
+                                /*
+                                 * Opnieuw laden zodat we
+                                 * daadwerkelijk de opgeslagen
+                                 * waarden tonen.
+                                 */
+
+                                Homey.alert(
+                                    'Knop is opgeslagen.'
+                                );
+
+
+                            }
+                        );
+                    }
+                );
+
+
+                fieldset.appendChild(saveButton);
+
+                buttonList.appendChild(fieldset);
+            }
+
+
+            /*
+             * NIEUWE KNOP
+             */
+            addButton.addEventListener(
+                'click',
+                function () {
+
+                    addButton.disabled = true;
+
+                    Homey.api(
+                        'POST',
+                        '/buttons',
+                        {
+                            type: 'action',
+                            text: 'Nieuwe knop',
+                            width: 'small',
+                            actionValue: ''
+                        },
+
+                        function (error, button) {
+
+                            addButton.disabled = false;
+
+                            if (error) {
+
+                                console.error(
+                                    'Fout bij aanmaken knop:',
+                                    error
+                                );
+
+                                Homey.alert(
+                                    'Aanmaken van de knop is mislukt.'
+                                );
+
+                                return;
+                            }
+
+
+                            console.log(
+                                'Nieuwe knop aangemaakt:',
+                                button
+                            );
+
+
+                            createButtonEditor(button);
+                        }
+                    );
+                }
+            );
+
+
+            /*
+             * Eerste keer laden
+             */
+            loadButtons();
+
+            Homey.ready();
+        }
+
+    </script>
+</body>
+
+</html>

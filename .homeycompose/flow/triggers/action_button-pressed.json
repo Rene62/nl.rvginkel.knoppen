@@ -1,0 +1,30 @@
+{
+    "title": {
+        "en": "Action button [[button]] is pressed",
+        "nl": "Actieknop [[button]] is ingedrukt"
+    },
+    "titleFormatted": {
+        "en": "Action button [[button]] is pressed",
+        "nl": "Actieknop [[button]] is ingedrukt"
+    },
+    "args": [
+        {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+                "en": "Button",
+                "nl": "Knop"
+            }
+        }
+    ],
+    "tokens": [
+        {
+            "name": "actionValue",
+            "type": "string",
+            "title": {
+                "en": "Action value",
+                "nl": "Actiewaarde"
+            }
+        }
+    ]
+}

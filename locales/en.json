@@ -1,0 +1,56 @@
+{
+  "settings": {
+    "title": "Buttons",
+    "subtitle": "Manage the buttons for your dashboard.",
+    "loading_buttons": "Loading buttons...",
+    "new_button": "+ New button",
+    "load_boolean_variables_error": "Error loading Yes/No variables.",
+    "load_buttons_error": "Error loading buttons.",
+    "no_buttons": "No buttons have been created yet.",
+    "button_name": "Button __number__: __text__",
+    "button_fallback": "Button",
+    "delete": "Delete",
+    "delete_confirm": "Delete button \"__name__\"?\n\nNote: This button will no longer be shown in widgets.\nIn the widget settings, select — Empty — or another button for this position.",
+    "delete_error": "Delete failed: __error__",
+    "type": "Type",
+    "type_action": "Action",
+    "type_boolean": "Yes/No",
+    "text": "Text",
+    "width": "Width",
+    "width_small": "Small",
+    "width_large": "Large",
+    "action_value": "Action value",
+    "boolean_variable": "Yes/No variable",
+    "select_variable": "Select a variable...",
+    "save": "Save",
+    "save_changed": "Save *",
+    "save_error": "Failed to save the button.",
+    "save_success": "Button saved.",
+    "new_button_default": "New button",
+    "create_error": "Failed to create the button."
+  },
+  "widget": {
+    "add_button": "Add a button",
+    "button_fallback": "Button"
+  },
+  "autocomplete": {
+    "button_name": "Button __number__: __text__",
+    "empty": "— Empty —",
+    "empty_deleted": "⚠ — Empty — (button deleted)"
+  },
+  "errors": {
+    "button_not_found": "Button not found",
+    "button_id_not_found": "Button with ID \"__id__\" not found",
+    "not_action_button": "Button \"__name__\" is not an action button",
+    "not_boolean_button": "Button \"__name__\" is not a Yes/No button",
+    "no_boolean_variable": "Button \"__name__\" has no Yes/No variable",
+    "boolean_variable_not_found": "Yes/No variable for button \"__name__\" not found",
+    "variable_not_boolean": "Variable for button \"__name__\" is not a Yes/No variable",
+    "no_button_id": "No button ID specified",
+    "no_boolean_variable_specified": "No boolean variable specified",
+    "selected_variable_not_found": "Boolean variable not found",
+    "selected_variable_not_boolean": "Selected variable is not boolean",
+    "invalid_button_type": "Invalid button type: \"__type__\"",
+    "invalid_button_width": "Invalid button width: \"__width__\""
+  }
+}

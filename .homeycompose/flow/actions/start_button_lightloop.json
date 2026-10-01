@@ -1,0 +1,38 @@
+{
+    "title": {
+        "en": "Start light loop around button",
+        "nl": "Start lichtloop rond knop"
+    },
+    "titleFormatted": {
+        "en": "Start light loop around [[button]] for [[duration]] seconds in [[color]]",
+        "nl": "Start lichtloop rond [[button]] gedurende [[duration]] seconden in [[color]]"
+    },
+    "args": [
+        {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+                "en": "Button",
+                "nl": "Knop"
+            }
+        },
+        {
+            "name": "duration",
+            "type": "number",
+            "title": {
+                "en": "Duration (seconds)",
+                "nl": "Duur (seconden)"
+            },
+            "min": 1,
+            "max": 15
+        },
+        {
+            "name": "color",
+            "type": "color",
+            "title": {
+                "en": "Color",
+                "nl": "Kleur"
+            }
+        }
+    ]
+}
