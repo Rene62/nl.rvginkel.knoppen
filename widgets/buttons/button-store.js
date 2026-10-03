@@ -66,7 +66,10 @@ class ButtonStore {
 
         if (!['action', 'boolean'].includes(type)) {
             throw new Error(
-                this.homey.__('errors.invalid_button_type', { type })
+                this.homey.__(
+                    'errors.invalid_button_type',
+                    { type }
+                )
             );
         }
     }
@@ -76,7 +79,10 @@ class ButtonStore {
 
         if (!['small', 'large'].includes(width)) {
             throw new Error(
-                this.homey.__('errors.invalid_button_width', { width })
+                this.homey.__(
+                    'errors.invalid_button_width',
+                    { width }
+                )
             );
         }
     }
@@ -89,7 +95,9 @@ class ButtonStore {
     getAll() {
 
         const storedButtons =
-            this.homey.settings.get(this.settingsKey) || [];
+            this.homey.settings.get(
+                this.settingsKey
+            ) || [];
 
         return new Buttons(storedButtons);
     }
@@ -137,6 +145,10 @@ class ButtonStore {
             enabled: true,
 
             actionValue,
+
+            permanentColorEnabled: false,
+            permanentColor: '#00ff66',
+
             variableId,
             variableName
         });
@@ -172,7 +184,10 @@ class ButtonStore {
 
         if (!button) {
             throw new Error(
-                `Knop met ID "${id}" niet gevonden`
+                this.homey.__(
+                    'errors.button_id_not_found',
+                    { id }
+                )
             );
         }
 
@@ -225,7 +240,9 @@ class ButtonStore {
 
         if (!(buttons instanceof Buttons)) {
             throw new Error(
-                'ButtonStore.save verwacht een Buttons-object'
+                this.homey.__(
+                    'errors.invalid_buttons_object'
+                )
             );
         }
 
@@ -264,7 +281,9 @@ class ButtonStore {
 
         if (typeof enabled !== 'boolean') {
             throw new Error(
-                'enabled moet true of false zijn'
+                this.homey.__(
+                    'errors.invalid_enabled_value'
+                )
             );
         }
 
@@ -274,11 +293,52 @@ class ButtonStore {
 
         if (!button) {
             throw new Error(
-                `Knop met ID "${id}" niet gevonden`
+                this.homey.__(
+                    'errors.button_id_not_found',
+                    { id }
+                )
             );
         }
 
         button.enabled = enabled;
+
+        this.save(buttons);
+
+        return button;
+    }
+
+
+    setPermanentColor(id, enabled, color) {
+
+        if (typeof enabled !== 'boolean') {
+            throw new Error(
+                this.homey.__(
+                    'errors.invalid_enabled_value'
+                )
+            );
+        }
+
+        const buttons = this.getAll();
+
+        const button = buttons.getById(id);
+
+        if (!button) {
+            throw new Error(
+                this.homey.__(
+                    'errors.button_id_not_found',
+                    { id }
+                )
+            );
+        }
+
+        button.permanentColorEnabled = enabled;
+
+        if (
+            typeof color === 'string' &&
+            color
+        ) {
+            button.permanentColor = color;
+        }
 
         this.save(buttons);
 

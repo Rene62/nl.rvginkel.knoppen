@@ -26,24 +26,20 @@
 <body>
 
     <header class="homey-header">
-        <h1 class="homey-title">
-            Knoppen
+        <h1 class="homey-title" data-i18n="settings.title">
         </h1>
 
-        <p class="homey-subtitle">
-            Beheer de knoppen voor je dashboard.
+        <p class="homey-subtitle" data-i18n="settings.subtitle">
         </p>
     </header>
 
 
 
-    <div id="buttonList">
-        Knoppen laden...
+    <div id="buttonList" data-i18n="settings.loading_buttons">
     </div>
 
     <div class="homey-form-group">
-        <button id="addButton" class="homey-button-primary-full">
-            + Nieuwe knop
+        <button id="addButton" class="homey-button-primary-full" data-i18n="settings.new_button">
         </button>
     </div>
 
@@ -80,7 +76,9 @@
                             );
 
                             buttonList.textContent =
-                                'Fout bij laden van Ja/Nee-variabelen.';
+                                Homey.__(
+                                    'settings.load_boolean_variables_error'
+                                );
 
                             return;
                         }
@@ -99,9 +97,10 @@
 
                                 if (error) {
                                     console.error(error);
-
                                     buttonList.textContent =
-                                        'Fout bij laden van knoppen.';
+                                        Homey.__(
+                                            'settings.load_buttons_error'
+                                        );
 
                                     return;
                                 }
@@ -111,7 +110,9 @@
                                     buttons.length === 0) {
 
                                     buttonList.textContent =
-                                        'Er zijn nog geen knoppen.';
+                                        Homey.__(
+                                            'settings.no_buttons'
+                                        );
 
                                     return;
                                 }
@@ -160,14 +161,23 @@
                     'homey-form-legend';
 
                 legendText.textContent =
-                    `Knop ${button.number}: ${button.text || 'Knop'}`;
+                    Homey.__(
+                        'settings.button_name',
+                        {
+                            number: button.number,
+                            text:
+                                button.text ||
+                                Homey.__('settings.button_fallback')
+                        }
+                    );
 
 
                 const deleteButton =
                     document.createElement('button');
 
                 deleteButton.type = 'button';
-                deleteButton.textContent = 'Verwijderen';
+                deleteButton.textContent =
+                    Homey.__('settings.delete');
                 deleteButton.className = 'button-delete';
 
                 deleteButton.addEventListener(
@@ -175,10 +185,14 @@
                     async function () {
 
                         const confirmed = await Homey.confirm(
-                            `Knop "${button.text || 'Knop'}" verwijderen?
-
-Let op: Deze knop wordt niet meer getoond in widgets.
-Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
+                            Homey.__(
+                                'settings.delete_confirm',
+                                {
+                                    name:
+                                        button.text ||
+                                        Homey.__('settings.button_fallback')
+                                }
+                            )
                         );
 
                         if (!confirmed) {
@@ -202,7 +216,12 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                                     );
 
                                     Homey.alert(
-                                        `Verwijderen mislukt: ${error.message || error}`
+                                        Homey.__(
+                                            'settings.delete_error',
+                                            {
+                                                error: error.message || error
+                                            }
+                                        )
                                     );
 
                                     return;
@@ -230,20 +249,20 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                     'homey-form-group';
 
                 typeGroup.innerHTML = `
-                <label class="homey-form-label">
-                    Type
-                </label>
+    <label class="homey-form-label">
+        ${Homey.__('settings.type')}
+    </label>
 
-                <select class="homey-form-select type-input">
-                    <option value="action">
-                        Actie
-                    </option>
+    <select class="homey-form-select type-input">
+        <option value="action">
+            ${Homey.__('settings.type_action')}
+        </option>
 
-                    <option value="boolean">
-                        Ja/Nee
-                    </option>
-                </select>
-            `;
+        <option value="boolean">
+            ${Homey.__('settings.type_boolean')}
+        </option>
+    </select>
+`;
 
                 const typeInput =
                     typeGroup.querySelector('.type-input');
@@ -264,14 +283,14 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                     'homey-form-group';
 
                 textGroup.innerHTML = `
-                <label class="homey-form-label">
-                    Tekst
-                </label>
+    <label class="homey-form-label">
+        ${Homey.__('settings.text')}
+    </label>
 
-                <input
-                    class="homey-form-input text-input"
-                    type="text">
-            `;
+    <input
+        class="homey-form-input text-input"
+        type="text">
+`;
 
                 const textInput =
                     textGroup.querySelector('.text-input');
@@ -333,14 +352,14 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                     'homey-form-group';
 
                 actionValueGroup.innerHTML = `
-                <label class="homey-form-label">
-                    Actiewaarde
-                </label>
+    <label class="homey-form-label">
+        ${Homey.__('settings.action_value')}
+    </label>
 
-                <input
-                    class="homey-form-input action-value-input"
-                    type="text">
-            `;
+    <input
+        class="homey-form-input action-value-input"
+        type="text">
+`;
 
                 const actionValueInput =
                     actionValueGroup.querySelector(
@@ -363,14 +382,14 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
 
                 booleanVariableGroup.innerHTML = `
     <label class="homey-form-label">
-        Ja/Nee-variabele
+        ${Homey.__('settings.boolean_variable')}
     </label>
 
     <select
         class="homey-form-select boolean-variable-input">
 
         <option value="">
-            Selecteer een variabele...
+            ${Homey.__('settings.select_variable')}
         </option>
 
     </select>
@@ -445,7 +464,7 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                     'homey-button-primary-full';
 
                 saveButton.textContent =
-                    'Opslaan';
+                    Homey.__('settings.save');
 
                 let changes = false;
                 function markAsChanged(event) {
@@ -456,9 +475,8 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                         )
                     ) {
                         changes = true;
-
                         saveButton.textContent =
-                            'Opslaan *';
+                            Homey.__('settings.save_changed');
                     }
                 }
 
@@ -526,7 +544,7 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                                     );
 
                                     Homey.alert(
-                                        'Opslaan van de knop is mislukt.'
+                                        Homey.__('settings.save_error')
                                     );
 
                                     return;
@@ -539,22 +557,26 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                                 );
 
                                 changes = false;
-
                                 saveButton.textContent =
-                                    'Opslaan';
+                                    Homey.__('settings.save');
 
                                 legendText.textContent =
-                                    `Knop ${updatedButton.number}: ${updatedButton.text || 'Knop'}`;
-
-
+                                    Homey.__(
+                                        'settings.button_name',
+                                        {
+                                            number: updatedButton.number,
+                                            text:
+                                                updatedButton.text ||
+                                                Homey.__('settings.button_fallback')
+                                        }
+                                    );
                                 /*
                                  * Opnieuw laden zodat we
                                  * daadwerkelijk de opgeslagen
                                  * waarden tonen.
                                  */
-
                                 Homey.alert(
-                                    'Knop is opgeslagen.'
+                                    Homey.__('settings.save_success')
                                 );
 
 
@@ -584,7 +606,9 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                         '/buttons',
                         {
                             type: 'action',
-                            text: 'Nieuwe knop',
+                            text: Homey.__(
+                                'settings.new_button_default'
+                            ),
                             width: 'small',
                             actionValue: ''
                         },
@@ -601,7 +625,7 @@ Kies in de widgetinstellingen voor deze knop — Leeg — of een andere knop.`
                                 );
 
                                 Homey.alert(
-                                    'Aanmaken van de knop is mislukt.'
+                                    Homey.__('settings.create_error')
                                 );
 
                                 return;

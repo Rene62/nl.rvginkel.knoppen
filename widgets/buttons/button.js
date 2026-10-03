@@ -13,6 +13,10 @@ class Button {
         // Action
         actionValue = '',
 
+        // Permanente kleur
+        permanentColorEnabled = false,
+        permanentColor = '#00ff66',
+
         // Boolean
         variableId = null,
         variableName = null
@@ -26,6 +30,9 @@ class Button {
         this.enabled = enabled;
 
         this.actionValue = actionValue;
+
+        this.permanentColorEnabled = permanentColorEnabled;
+        this.permanentColor = permanentColor;
 
         this.variableId = variableId;
         this.variableName = variableName;
@@ -57,6 +64,8 @@ class Button {
             width: this.width,
             enabled: this.enabled,
             actionValue: this.actionValue,
+            permanentColorEnabled: this.permanentColorEnabled,
+            permanentColor: this.permanentColor,
             variableId: this.variableId,
             variableName: this.variableName
         };

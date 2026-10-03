@@ -134,6 +134,78 @@ class KnoppenApp extends Homey.App {
             );
 
 
+        // actiekaart permanente kleur
+
+        this.setButtonPermanentColorAction =
+            this.homey.flow.getActionCard(
+                'set_button_permanent_color'
+            );
+
+        this.setButtonPermanentColorAction
+            .getArgument('button')
+            .registerAutocompleteListener(
+                async query => {
+
+                    const buttons =
+                        this.buttonStore
+                            .getAll()
+                            .getAll();
+
+                    return buttons
+                        .filter(button =>
+                            button.type === 'action'
+                        )
+                        .filter(button =>
+                            button.text
+                                .toLowerCase()
+                                .includes(
+                                    query.toLowerCase()
+                                )
+                        )
+                        .map(button => ({
+                            id: button.id,
+                            name:
+                                this.homey.__(
+                                    'autocomplete.button_name',
+                                    {
+                                        number: button.number,
+                                        text: button.text
+                                    }
+                                )
+                        }));
+                }
+            );
+
+        this.setButtonPermanentColorAction
+            .registerRunListener(
+                async args => {
+
+                    const enabled =
+                        args.enabled === 'true';
+
+                    const button =
+                        this.buttonStore.setPermanentColor(
+                            args.button.id,
+                            enabled,
+                            args.color
+                        );
+
+                    await this.homey.api.realtime(
+                        'buttonPermanentColorChanged',
+                        {
+                            buttonId: button.id,
+                            enabled:
+                                button.permanentColorEnabled,
+                            color:
+                                button.permanentColor
+                        }
+                    );
+
+                    return true;
+                }
+            );
+
+
 
         // Flow-trigger: Actieknop
         this.actionButtonTrigger =

@@ -1,0 +1,52 @@
+{
+    "title": {
+        "en": "Set permanent button color",
+        "nl": "Stel permanente kleur van knop in"
+    },
+    "titleFormatted": {
+        "en": "Set permanent color of [[button]] to [[enabled]] in [[color]]",
+        "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]"
+    },
+    "args": [
+        {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+                "en": "Button",
+                "nl": "Knop"
+            }
+        },
+        {
+            "name": "enabled",
+            "type": "dropdown",
+            "title": {
+                "en": "Permanent color",
+                "nl": "Permanente kleur"
+            },
+            "values": [
+                {
+                    "id": "true",
+                    "title": {
+                        "en": "On",
+                        "nl": "Aan"
+                    }
+                },
+                {
+                    "id": "false",
+                    "title": {
+                        "en": "Off",
+                        "nl": "Uit"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "color",
+            "type": "color",
+            "title": {
+                "en": "Color",
+                "nl": "Kleur"
+            }
+        }
+    ]
+}

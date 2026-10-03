@@ -51,6 +51,8 @@
     "selected_variable_not_found": "Boolean variabele niet gevonden",
     "selected_variable_not_boolean": "Geselecteerde variabele is geen boolean",
     "invalid_button_type": "Ongeldig knoptype: \"__type__\"",
-    "invalid_button_width": "Ongeldige knopbreedte: \"__width__\""
+    "invalid_button_width": "Ongeldige knopbreedte: \"__width__\"",
+    "invalid_enabled_value": "enabled moet true of false zijn",
+    "invalid_buttons_object": "ButtonStore.save verwacht een Buttons-object"
   }
 }

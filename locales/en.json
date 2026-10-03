@@ -51,6 +51,8 @@
     "selected_variable_not_found": "Boolean variable not found",
     "selected_variable_not_boolean": "Selected variable is not boolean",
     "invalid_button_type": "Invalid button type: \"__type__\"",
-    "invalid_button_width": "Invalid button width: \"__width__\""
+    "invalid_button_width": "Invalid button width: \"__width__\"",
+    "invalid_enabled_value": "enabled must be true or false",
+    "invalid_buttons_object": "ButtonStore.save expects a Buttons object"
   }
 }

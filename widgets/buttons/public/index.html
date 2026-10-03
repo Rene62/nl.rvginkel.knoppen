@@ -23,6 +23,52 @@
 
 
             Homey.on(
+                'buttonPermanentColorChanged',
+                data => {
+
+                    const buttonElement =
+                        buttonContainer.querySelector(
+                            `[data-button-id="${data.buttonId}"]`
+                        );
+
+                    if (!buttonElement) {
+                        return;
+                    }
+
+                    const permanentPath =
+                        buttonElement.querySelector(
+                            '.permanent-path'
+                        );
+
+                    if (!permanentPath) {
+                        return;
+                    }
+
+                    permanentPath.style.stroke =
+                        data.color || '#00ff66';
+
+                    permanentPath.dataset.enabled =
+                        data.enabled === true
+                            ? 'true'
+                            : 'false';
+
+                    if (
+                        buttonElement.dataset.lightloopActive ===
+                        'true'
+                    ) {
+                        permanentPath.style.display =
+                            'none';
+                    } else {
+                        permanentPath.style.display =
+                            data.enabled === true
+                                ? ''
+                                : 'none';
+                    }
+                }
+            );
+
+
+            Homey.on(
                 'buttonLightloop',
                 data => {
 
@@ -34,6 +80,19 @@
                     if (!buttonElement) {
                         return;
                     }
+
+                    const permanentPath =
+                        buttonElement.querySelector(
+                            '.permanent-path'
+                        );
+
+                    if (permanentPath) {
+                        permanentPath.style.display =
+                            'none';
+                    }
+
+                    buttonElement.dataset.lightloopActive =
+                        'true';
 
                     buttonElement.style.setProperty(
                         '--lightloop-color',
@@ -112,6 +171,16 @@
                                         'none';
                                 }
                             );
+
+                            buttonElement.dataset.lightloopActive =
+                                'false';
+
+                            if (permanentPath) {
+                                permanentPath.style.display =
+                                    permanentPath.dataset.enabled === 'true'
+                                        ? ''
+                                        : 'none';
+                            }
 
                             return;
                         }
@@ -319,7 +388,32 @@
                         'lightloop-svg'
                     );
 
+                    const permanentPath =
+                        document.createElementNS(
+                            'http://www.w3.org/2000/svg',
+                            'path'
+                        );
 
+                    permanentPath.classList.add(
+                        'permanent-path'
+                    );
+
+                    permanentPath.style.fill = 'none';
+                    permanentPath.style.stroke =
+                        button.permanentColor || '#00ff66';
+                    permanentPath.dataset.enabled =
+                        button.permanentColorEnabled === true
+                            ? 'true'
+                            : 'false';
+                    permanentPath.style.strokeWidth = '2';
+                    permanentPath.style.display =
+                        button.permanentColorEnabled === true
+                            ? ''
+                            : 'none';
+
+                    lightloopSvg.appendChild(
+                        permanentPath
+                    );
 
                     const lightloopPathTop =
                         document.createElementNS(
@@ -482,6 +576,11 @@
                         `A ${radius} ${radius} 0 0 1 ${left + radius} ${top}`,
                         'Z'
                     ].join(' ');
+
+                    permanentPath.setAttribute(
+                        'd',
+                        pathData
+                    );
 
                     [
                         lightloopPathTop,

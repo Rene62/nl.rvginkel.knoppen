@@ -1,0 +1,9 @@
+{
+  "1.0.0": {
+    "en": "Initial version"
+  },
+  "1.1.0": {
+    "en": "Support for light and dark mode, permanent button colors via Flow, and full English translation of the settings. Various minor improvements.",
+    "nl": "Ondersteuning voor lichte en donkere modus, permanente knopkleuren via Flow en volledige Engelse vertaling van de instellingen. Diverse kleine verbeteringen."
+  }
+}

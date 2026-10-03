@@ -7,6 +7,10 @@
         "en": "Action button [[button]] is pressed",
         "nl": "Actieknop [[button]] is ingedrukt"
     },
+    "hint": {
+        "en": "The Action value configured for the button is available in this Flow as a text tag.",
+        "nl": "De ingestelde Actiewaarde bij de knop is in deze Flow beschikbaar als teksttag."
+    },
     "args": [
         {
             "name": "button",

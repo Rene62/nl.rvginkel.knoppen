@@ -1,6 +1,6 @@
 {
   "id": "nl.rvginkel.knoppen",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "compatibility": ">=12.3.0",
   "sdk": 3,
   "brandColor": "#00AEEF",
@@ -208,6 +208,10 @@
           "en": "Action button [[button]] is pressed",
           "nl": "Actieknop [[button]] is ingedrukt"
         },
+        "hint": {
+          "en": "The Action value configured for the button is available in this Flow as a text tag.",
+          "nl": "De ingestelde Actiewaarde bij de knop is in deze Flow beschikbaar als teksttag."
+        },
         "args": [
           {
             "name": "button",
@@ -238,6 +242,10 @@
         "titleFormatted": {
           "en": "Yes/No button [[button]] is pressed",
           "nl": "Ja/Nee-knop [[button]] is ingedrukt"
+        },
+        "hint": {
+          "en": "The 'Button Yes/No' tag contains the new status of the button. Use this tag in the Flow to change the linked Yes/No variable using a Logic Flow card.",
+          "nl": "De tag 'Knop Ja/Nee' bevat de nieuwe status van de knop. Gebruik deze tag in de Flow om via een Logic Flow-kaart de gekoppelde Ja/Nee-variabele te wijzigen."
         },
         "args": [
           {
@@ -307,6 +315,59 @@
           }
         ],
         "id": "set_button_enabled"
+      },
+      {
+        "title": {
+          "en": "Set permanent button color",
+          "nl": "Stel permanente kleur van knop in"
+        },
+        "titleFormatted": {
+          "en": "Set permanent color of [[button]] to [[enabled]] in [[color]]",
+          "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]"
+        },
+        "args": [
+          {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+              "en": "Button",
+              "nl": "Knop"
+            }
+          },
+          {
+            "name": "enabled",
+            "type": "dropdown",
+            "title": {
+              "en": "Permanent color",
+              "nl": "Permanente kleur"
+            },
+            "values": [
+              {
+                "id": "true",
+                "title": {
+                  "en": "On",
+                  "nl": "Aan"
+                }
+              },
+              {
+                "id": "false",
+                "title": {
+                  "en": "Off",
+                  "nl": "Uit"
+                }
+              }
+            ]
+          },
+          {
+            "name": "color",
+            "type": "color",
+            "title": {
+              "en": "Color",
+              "nl": "Kleur"
+            }
+          }
+        ],
+        "id": "set_button_permanent_color"
       },
       {
         "title": {
