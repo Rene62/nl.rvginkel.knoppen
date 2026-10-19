@@ -1,34 +1,39 @@
 {
-    "title": {
-        "en": "Action button [[button]] is pressed",
-        "nl": "Actieknop [[button]] is ingedrukt"
-    },
-    "titleFormatted": {
-        "en": "Action button [[button]] is pressed",
-        "nl": "Actieknop [[button]] is ingedrukt"
-    },
-    "hint": {
-        "en": "The Action value configured for the button is available in this Flow as a text tag.",
-        "nl": "De ingestelde Actiewaarde bij de knop is in deze Flow beschikbaar als teksttag."
-    },
-    "args": [
-        {
-            "name": "button",
-            "type": "autocomplete",
-            "title": {
-                "en": "Button",
-                "nl": "Knop"
-            }
-        }
-    ],
-    "tokens": [
-        {
-            "name": "actionValue",
-            "type": "string",
-            "title": {
-                "en": "Action value",
-                "nl": "Actiewaarde"
-            }
-        }
-    ]
+  "title": {
+    "en": "Action button [[button]] is pressed",
+    "nl": "Actieknop [[button]] is ingedrukt",
+    "es": "Se ha pulsado el botón de acción [[button]]"
+  },
+  "titleFormatted": {
+    "en": "Action button [[button]] is pressed",
+    "nl": "Actieknop [[button]] is ingedrukt",
+    "es": "Se ha pulsado el botón de acción [[button]]"
+  },
+  "hint": {
+    "en": "The Action value configured for the button is available in this Flow as a text tag.",
+    "nl": "De ingestelde Actiewaarde bij de knop is in deze Flow beschikbaar als teksttag.",
+    "es": "El valor de acción configurado para el botón está disponible en este Flow como etiqueta de texto."
+  },
+  "args": [
+    {
+      "name": "button",
+      "type": "autocomplete",
+      "title": {
+        "en": "Button",
+        "nl": "Knop",
+        "es": "Botón"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "actionValue",
+      "type": "string",
+      "title": {
+        "en": "Action value",
+        "nl": "Actiewaarde",
+        "es": "Valor de acción"
+      }
+    }
+  ]
 }

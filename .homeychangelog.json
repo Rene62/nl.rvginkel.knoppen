@@ -5,5 +5,10 @@
   "1.1.0": {
     "en": "Support for light and dark mode, permanent button colors via Flow, and full English translation of the settings. Various minor improvements.",
     "nl": "Ondersteuning voor lichte en donkere modus, permanente knopkleuren via Flow en volledige Engelse vertaling van de instellingen. Diverse kleine verbeteringen."
+  },
+  "1.2.0": {
+    "en": "Added Better Logic and Flow as status sources for Yes/No buttons, selectable text alignment, a Flow card to set the Yes/No status, and Spanish language support. Various minor improvements.",
+    "nl": "Better Logic en Flow toegevoegd als statusbron voor Ja/Nee-knoppen, instelbare tekstuitlijning, een Flow-kaart om de Ja/Nee-status in te stellen en ondersteuning voor Spaans. Diverse kleine verbeteringen.",
+    "es": "Se añadieron Better Logic y Flow como fuentes de estado para los botones Sí/No, alineación de texto configurable, una tarjeta de Flow para establecer el estado Sí/No y compatibilidad con español. Varias mejoras menores."
   }
 }

@@ -124,7 +124,9 @@ class ButtonStore {
         type = 'action',
         text = 'Nieuwe knop',
         width = 'small',
+        textAlign = 'center',
         actionValue = '',
+        variableSource = 'homey',
         variableId = null,
         variableName = null
     } = {}) {
@@ -140,6 +142,7 @@ class ButtonStore {
             type,
             text,
             width,
+            textAlign,
 
             // Nieuwe knop is altijd actief.
             enabled: true,
@@ -149,6 +152,7 @@ class ButtonStore {
             permanentColorEnabled: false,
             permanentColor: '#00ff66',
 
+            variableSource,
             variableId,
             variableName
         });
@@ -173,7 +177,9 @@ class ButtonStore {
         type,
         text,
         width,
+        textAlign,
         actionValue,
+        variableSource,
         variableId,
         variableName
     } = {}) {
@@ -214,8 +220,19 @@ class ButtonStore {
             button.width = width;
         }
 
+        if (textAlign !== undefined) {
+            button.textAlign =
+                textAlign === 'left'
+                    ? 'left'
+                    : 'center';
+        }
+
         if (actionValue !== undefined) {
             button.actionValue = actionValue;
+        }
+
+        if (variableSource !== undefined) {
+            button.variableSource = variableSource;
         }
 
         if (variableId !== undefined) {
@@ -301,6 +318,59 @@ class ButtonStore {
         }
 
         button.enabled = enabled;
+
+        this.save(buttons);
+
+        return button;
+    }
+
+    /**
+ * Ja/Nee-status van een knop wijzigen.
+ */
+    setBooleanValue(id, value) {
+
+        if (typeof value !== 'boolean') {
+            throw new Error(
+                this.homey.__(
+                    'errors.invalid_boolean_value'
+                )
+            );
+        }
+
+        const buttons =
+            this.getAll();
+
+        const button =
+            buttons.getById(id);
+
+        if (!button) {
+            throw new Error(
+                this.homey.__(
+                    'errors.button_id_not_found',
+                    { id }
+                )
+            );
+        }
+
+        if (button.type !== 'boolean') {
+            throw new Error(
+                this.homey.__(
+                    'errors.not_boolean_button',
+                    { name: button.text }
+                )
+            );
+        }
+
+        if ((button.variableSource || 'homey') !== 'flow') {
+            throw new Error(
+                this.homey.__(
+                    'errors.not_flow_status_button',
+                    { name: button.text }
+                )
+            );
+        }
+
+        button.booleanValue = value;
 
         this.save(buttons);
 

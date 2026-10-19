@@ -16,8 +16,6 @@
     <script>
         async function onHomeyReady(Homey) {
 
-
-
             const buttonContainer =
                 document.getElementById('buttonContainer');
 
@@ -253,6 +251,8 @@
                         buttonElement => {
 
                             if (
+                                buttonElement.dataset.variableSource !==
+                                data.variableSource ||
                                 buttonElement.dataset.variableId !==
                                 data.variableId
                             ) {
@@ -284,6 +284,52 @@
                             }
                         }
                     );
+                }
+            );
+
+            Homey.on(
+                'buttonBooleanValueChanged',
+                data => {
+
+                    const buttonElement =
+                        buttonContainer.querySelector(
+                            `[data-button-id="${data.buttonId}"]`
+                        );
+
+                    if (!buttonElement) {
+                        return;
+                    }
+
+                    if (
+                        buttonElement.dataset.variableSource !==
+                        'flow'
+                    ) {
+                        return;
+                    }
+
+                    const statusDot =
+                        buttonElement.querySelector(
+                            '.status-dot'
+                        );
+
+                    if (!statusDot) {
+                        return;
+                    }
+
+                    statusDot.classList.remove(
+                        'status-on',
+                        'status-off'
+                    );
+
+                    if (data.value === true) {
+                        statusDot.classList.add(
+                            'status-on'
+                        );
+                    } else {
+                        statusDot.classList.add(
+                            'status-off'
+                        );
+                    }
                 }
             );
 
@@ -322,6 +368,7 @@
                         )
                         .filter(Boolean);
 
+
                 buttonContainer.innerHTML = '';
                 if (buttons.length === 0) {
 
@@ -356,8 +403,20 @@
                         const textElement =
                             document.createElement('span');
 
-                        textElement.textContent =
+                        textElement.classList.add(
+                            'button-text'
+                        );
+
+                        if (button.textAlign === 'left') {
+                            textElement.classList.add(
+                                'text-align-left'
+                            );
+                        }
+
+                        const buttonText =
                             button.text || Homey.__('widget.button_fallback');
+
+                        textElement.textContent = buttonText;
 
                         buttonElement.appendChild(
                             statusDot
@@ -504,6 +563,26 @@
 
                     if (button.type === 'boolean') {
 
+                        buttonElement.dataset.variableSource =
+                            button.variableSource || 'homey';
+
+                        if (
+                            button.variableSource === 'flow'
+                        ) {
+                            const statusDot =
+                                buttonElement.querySelector(
+                                    '.status-dot'
+                                );
+
+                            if (statusDot) {
+                                statusDot.classList.add(
+                                    button.booleanValue === true
+                                        ? 'status-on'
+                                        : 'status-off'
+                                );
+                            }
+                        }
+
                         buttonElement.addEventListener(
                             'click',
                             async () => {
@@ -533,6 +612,277 @@
                     buttonContainer.appendChild(
                         buttonElement
                     );
+
+                    /*
+ * Links uitgelijnde Ja/Nee-tekst:
+ * alleen indien nodig verdelen over twee regels.
+ */
+                    if (
+                        button.type === 'boolean' &&
+                        button.textAlign === 'left'
+                    ) {
+
+                        const textElement =
+                            buttonElement.querySelector('.button-text');
+
+                        if (textElement) {
+
+                            const textStyle =
+                                getComputedStyle(textElement);
+
+                            const canvas =
+                                document.createElement('canvas');
+
+                            const context =
+                                canvas.getContext('2d');
+
+                            context.font =
+                                textStyle.font;
+
+                            const textWidth =
+                                context.measureText(
+                                    textElement.textContent
+                                ).width;
+
+                            const availableWidth =
+                                textElement.clientWidth;
+
+                            if (textWidth > availableWidth) {
+
+                                const words =
+                                    textElement.textContent
+                                        .trim()
+                                        .split(/\s+/);
+
+                                if (words.length > 1) {
+
+                                    let bestText = null;
+                                    let bestWidth = Infinity;
+
+                                    for (
+                                        let i = 1;
+                                        i < words.length;
+                                        i++
+                                    ) {
+
+                                        const firstLine =
+                                            words.slice(0, i).join(' ');
+
+                                        const secondLine =
+                                            words.slice(i).join(' ');
+
+                                        const firstWidth =
+                                            context.measureText(firstLine).width;
+
+                                        const secondWidth =
+                                            context.measureText(secondLine).width;
+
+                                        const widestLine =
+                                            Math.max(
+                                                firstWidth,
+                                                secondWidth
+                                            );
+
+                                        if (
+                                            widestLine < bestWidth &&
+                                            widestLine <= availableWidth
+                                        ) {
+
+                                            bestWidth =
+                                                widestLine;
+
+                                            bestText =
+                                                `${firstLine}\n${secondLine}`;
+                                        }
+                                    }
+
+                                    if (bestText) {
+
+                                        textElement.style.whiteSpace =
+                                            'pre';
+
+                                        textElement.textContent =
+                                            bestText;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (
+                        button.type === 'boolean' &&
+                        button.textAlign !== 'left'
+                    ) {
+
+                        const statusDot =
+                            buttonElement.querySelector('.status-dot');
+
+                        const textElement =
+                            buttonElement.querySelector('.button-text');
+
+                        if (statusDot && textElement) {
+
+                            const buttonRect =
+                                buttonElement.getBoundingClientRect();
+
+                            const dotRect =
+                                statusDot.getBoundingClientRect();
+
+                            const textStyle =
+                                getComputedStyle(textElement);
+
+                            const canvas =
+                                document.createElement('canvas');
+
+                            const context =
+                                canvas.getContext('2d');
+
+                            context.font =
+                                textStyle.font;
+
+                            const textWidth =
+                                context.measureText(
+                                    textElement.textContent
+                                ).width;
+
+                            // Positie bij exact centreren
+                            const centeredLeft =
+                                buttonRect.left +
+                                (buttonRect.width - textWidth) / 2;
+
+                            // Tekst mag niet over het bolletje lopen
+                            const minimumLeft =
+                                dotRect.right + 15;
+
+                            // Eerst bepalen waar de tekst uiteindelijk zou komen
+                            const shift =
+                                centeredLeft < minimumLeft
+                                    ? minimumLeft - centeredLeft
+                                    : 0;
+
+                            const finalLeft =
+                                centeredLeft + shift;
+
+                            const finalRight =
+                                finalLeft + textWidth;
+
+                            // Rechts ook een kleine marge houden
+                            const maximumRight =
+                                buttonRect.right - 8;
+
+                            if (finalRight <= maximumRight) {
+
+                                // Past netjes op één regel
+                                if (shift > 0) {
+                                    textElement.style.transform =
+                                        `translateX(${shift}px)`;
+                                }
+
+                            } else {
+
+                                // Past niet netjes op één regel:
+                                // zoek de beste verdeling over twee regels
+                                const words =
+                                    textElement.textContent
+                                        .trim()
+                                        .split(/\s+/);
+
+                                if (words.length > 1) {
+
+                                    let bestText = null;
+                                    let bestWidth = Infinity;
+
+                                    for (
+                                        let i = 1;
+                                        i < words.length;
+                                        i++
+                                    ) {
+
+                                        const firstLine =
+                                            words.slice(0, i).join(' ');
+
+                                        const secondLine =
+                                            words.slice(i).join(' ');
+
+                                        const firstWidth =
+                                            context.measureText(firstLine).width;
+
+                                        const secondWidth =
+                                            context.measureText(secondLine).width;
+
+                                        const widestLine =
+                                            Math.max(
+                                                firstWidth,
+                                                secondWidth
+                                            );
+
+                                        if (widestLine < bestWidth) {
+
+                                            bestWidth =
+                                                widestLine;
+
+                                            bestText =
+                                                `${firstLine}\n${secondLine}`;
+                                        }
+                                    }
+                                    if (bestText) {
+
+                                        textElement.style.whiteSpace =
+                                            'pre';
+
+                                        textElement.textContent =
+                                            bestText;
+
+                                        // De breedste regel bepaalt de breedte
+                                        // van het tweeregelige tekstblok.
+                                        const twoLineLeft =
+                                            buttonRect.left +
+                                            (buttonRect.width - bestWidth) / 2;
+
+                                        const twoLineMinimumLeft =
+                                            dotRect.right + 15;
+
+                                        let twoLineShift = 0;
+
+                                        // Alleen naar rechts schuiven als de
+                                        // breedste regel te dicht bij het bolletje komt.
+                                        if (twoLineLeft < twoLineMinimumLeft) {
+
+                                            twoLineShift =
+                                                twoLineMinimumLeft - twoLineLeft;
+                                        }
+
+                                        // Controleer ook de rechterkant.
+                                        const twoLineRight =
+                                            twoLineLeft +
+                                            twoLineShift +
+                                            bestWidth;
+
+                                        const twoLineMaximumRight =
+                                            buttonRect.right - 8;
+
+                                        if (twoLineRight > twoLineMaximumRight) {
+
+                                            twoLineShift -=
+                                                twoLineRight -
+                                                twoLineMaximumRight;
+                                        }
+
+                                        if (twoLineShift > 0) {
+
+                                            textElement.style.transform =
+                                                `translateX(${twoLineShift}px)`;
+
+                                        } else {
+
+                                            textElement.style.transform = '';
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                    }
 
 
                     const buttonWidth =
@@ -597,13 +947,18 @@
                         button.type === 'boolean' &&
                         button.variableId
                     ) {
+
+
                         buttonElement.dataset.variableId =
                             button.variableId;
 
                         Homey.api(
                             'GET',
-                            `/boolean?variableId=${encodeURIComponent(button.variableId)}`
+                            button.variableSource === 'betterlogic'
+                                ? `/betterlogic-boolean?variableId=${encodeURIComponent(button.variableId)}`
+                                : `/boolean?variableId=${encodeURIComponent(button.variableId)}`
                         )
+
                             .then(result => {
 
                                 const statusDot =

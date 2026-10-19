@@ -19,6 +19,13 @@
     "width": "Width",
     "width_small": "Small",
     "width_large": "Large",
+    "text_alignment": "Text alignment",
+    "text_alignment_left": "Left",
+    "text_alignment_center": "Centered",
+    "status_source": "Status source",
+    "status_source_homey": "Homey variable",
+    "status_source_betterlogic": "Better Logic variable",
+    "status_source_flow": "Flow - no variable",
     "action_value": "Action value",
     "boolean_variable": "Yes/No variable",
     "select_variable": "Select a variable...",
@@ -53,6 +60,9 @@
     "invalid_button_type": "Invalid button type: \"__type__\"",
     "invalid_button_width": "Invalid button width: \"__width__\"",
     "invalid_enabled_value": "enabled must be true or false",
-    "invalid_buttons_object": "ButtonStore.save expects a Buttons object"
+    "invalid_buttons_object": "ButtonStore.save expects a Buttons object",
+    "better_logic_unavailable": "Better Logic is not available",
+    "invalid_boolean_value": "booleanValue must be true or false",
+    "not_flow_status_button": "Button \"__name__\" does not use Flow as its status source"
   }
 }

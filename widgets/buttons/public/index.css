@@ -21,18 +21,26 @@ body {
     box-sizing: border-box;
 }
 
+.panel-button .button-text {
+    position: absolute;
+    left: 0;
+    right: 0;
 
-
-
-
-.button-text {
-    min-width: 0;
-
-    overflow: hidden;
+    text-align: center;
     white-space: nowrap;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
+.panel-button .button-text.text-align-left {
+    left: 57px;
+    right: 12px;
+
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .status-on {
     background: #24c75a;
@@ -67,6 +75,9 @@ body {
 }
 
 .status-dot {
+    position: absolute;
+    left: 22px;
+
     display: inline-block;
 
     width: 20px;

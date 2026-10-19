@@ -9,6 +9,7 @@ class Button {
         text = 'Knop',
         width = 'small',
         enabled = true,
+        textAlign = 'center',
 
         // Action
         actionValue = '',
@@ -18,8 +19,10 @@ class Button {
         permanentColor = '#00ff66',
 
         // Boolean
+        variableSource = 'homey',
         variableId = null,
-        variableName = null
+        variableName = null,
+        booleanValue = false
     }) {
 
         this.id = id;
@@ -28,14 +31,20 @@ class Button {
         this.text = text;
         this.width = width;
         this.enabled = enabled;
+        this.textAlign =
+            textAlign === 'left'
+                ? 'left'
+                : 'center';
 
         this.actionValue = actionValue;
 
         this.permanentColorEnabled = permanentColorEnabled;
         this.permanentColor = permanentColor;
 
+        this.variableSource = variableSource;
         this.variableId = variableId;
         this.variableName = variableName;
+        this.booleanValue = booleanValue;
     }
 
 
@@ -66,8 +75,11 @@ class Button {
             actionValue: this.actionValue,
             permanentColorEnabled: this.permanentColorEnabled,
             permanentColor: this.permanentColor,
+            variableSource: this.variableSource,
             variableId: this.variableId,
-            variableName: this.variableName
+            variableName: this.variableName,
+            booleanValue: this.booleanValue,
+            textAlign: this.textAlign
         };
     }
 

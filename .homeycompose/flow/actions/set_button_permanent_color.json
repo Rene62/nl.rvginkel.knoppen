@@ -1,52 +1,59 @@
 {
-    "title": {
-        "en": "Set permanent button color",
-        "nl": "Stel permanente kleur van knop in"
+  "title": {
+    "en": "Set permanent button color",
+    "nl": "Stel permanente kleur van knop in",
+    "es": "Establecer color permanente del botón"
+  },
+  "titleFormatted": {
+    "en": "Set permanent color of [[button]] to [[enabled]] in [[color]]",
+    "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]",
+    "es": "Establecer el color permanente de [[button]] en [[color]]: [[enabled]]"
+  },
+  "args": [
+    {
+      "name": "button",
+      "type": "autocomplete",
+      "title": {
+        "en": "Button",
+        "nl": "Knop",
+        "es": "Botón"
+      }
     },
-    "titleFormatted": {
-        "en": "Set permanent color of [[button]] to [[enabled]] in [[color]]",
-        "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]"
-    },
-    "args": [
+    {
+      "name": "enabled",
+      "type": "dropdown",
+      "title": {
+        "en": "Permanent color",
+        "nl": "Permanente kleur",
+        "es": "Color permanente"
+      },
+      "values": [
         {
-            "name": "button",
-            "type": "autocomplete",
-            "title": {
-                "en": "Button",
-                "nl": "Knop"
-            }
+          "id": "true",
+          "title": {
+            "en": "On",
+            "nl": "Aan",
+            "es": "Activado"
+          }
         },
         {
-            "name": "enabled",
-            "type": "dropdown",
-            "title": {
-                "en": "Permanent color",
-                "nl": "Permanente kleur"
-            },
-            "values": [
-                {
-                    "id": "true",
-                    "title": {
-                        "en": "On",
-                        "nl": "Aan"
-                    }
-                },
-                {
-                    "id": "false",
-                    "title": {
-                        "en": "Off",
-                        "nl": "Uit"
-                    }
-                }
-            ]
-        },
-        {
-            "name": "color",
-            "type": "color",
-            "title": {
-                "en": "Color",
-                "nl": "Kleur"
-            }
+          "id": "false",
+          "title": {
+            "en": "Off",
+            "nl": "Uit",
+            "es": "Desactivado"
+          }
         }
-    ]
+      ]
+    },
+    {
+      "name": "color",
+      "type": "color",
+      "title": {
+        "en": "Color",
+        "nl": "Kleur",
+        "es": "Color"
+      }
+    }
+  ]
 }

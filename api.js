@@ -35,6 +35,14 @@ module.exports = {
     },
 
     /**
+ * Controleren of Better Logic beschikbaar is.
+ */
+    async getBetterLogicAvailable({ homey }) {
+
+        return homey.app.betterLogicAvailable === true;
+    },
+
+    /**
      * Alle knoppen ophalen.
      */
     async getButtons({ homey }) {
@@ -44,6 +52,44 @@ module.exports = {
 
         return buttons.toJSON();
     },
+
+    /**
+ * Alle bruikbare Better Logic Ja/Nee-variabelen ophalen.
+ */
+    async getBetterLogicBooleanVariables({ homey }) {
+
+        if (!homey.app.betterLogicAvailable) {
+            return [];
+        }
+
+        const betterLogicApi =
+            homey.api.getApiApp(
+                'net.i-dev.betterlogic'
+            );
+
+        const variables =
+            await betterLogicApi.get('/all/');
+
+        return variables
+            .filter(variable =>
+                variable.type === 'boolean' &&
+                variable.remove === false
+            )
+            .map(variable => ({
+                id: variable.name,
+                name: variable.name
+            }))
+            .sort((a, b) =>
+                a.name.localeCompare(
+                    b.name,
+                    'nl',
+                    { sensitivity: 'base' }
+                )
+            );
+    },
+
+
+
 
 
     /**
@@ -56,7 +102,9 @@ module.exports = {
                 type: body?.type || 'action',
                 text: body?.text || homey.__('settings.new_button_default'),
                 width: body?.width || 'small',
+                textAlign: body?.textAlign || 'center',
                 actionValue: body?.actionValue || '',
+                variableSource: body?.variableSource || 'homey',
                 variableId: body?.variableId || null,
                 variableName: body?.variableName || null
             });
@@ -81,11 +129,14 @@ module.exports = {
                     type: body.type,
                     text: body.text,
                     width: body.width,
+                    textAlign: body.textAlign,
                     actionValue: body.actionValue,
+                    variableSource: body.variableSource,
                     variableId: body.variableId,
                     variableName: body.variableName
                 }
             );
+
 
         return button.toJSON();
     },

@@ -1,0 +1,60 @@
+{
+  "title": {
+    "en": "Set Yes/No status of button",
+    "nl": "Stel Ja/Nee-status van knop in",
+    "es": "Establecer estado Sí/No del botón"
+  },
+  "titleFormatted": {
+    "en": "Set [[button]] to [[value]]",
+    "nl": "Stel [[button]] in op [[value]]",
+    "es": "Establecer [[button]] en [[value]]"
+  },
+  "hint": {
+    "en": "Sets the Yes/No status of a button that uses 'Flow - no variable' as its status source.",
+    "nl": "Stelt de Ja/Nee-status in van een knop die 'Flow - geen variabele' als statusbron gebruikt.",
+    "es": "Establece el estado Sí/No de un botón que usa 'Flow - sin variable' como fuente de estado."
+  },
+  "args": [
+    {
+      "type": "autocomplete",
+      "name": "button",
+      "title": {
+        "en": "Button",
+        "nl": "Knop",
+        "es": "Botón"
+      },
+      "placeholder": {
+        "en": "Select a button",
+        "nl": "Selecteer een knop",
+        "es": "Selecciona un botón"
+      }
+    },
+    {
+      "type": "dropdown",
+      "name": "value",
+      "title": {
+        "en": "Status",
+        "nl": "Status",
+        "es": "Estado"
+      },
+      "values": [
+        {
+          "id": "true",
+          "title": {
+            "en": "Yes",
+            "nl": "Ja",
+            "es": "Sí"
+          }
+        },
+        {
+          "id": "false",
+          "title": {
+            "en": "No",
+            "nl": "Nee",
+            "es": "No"
+          }
+        }
+      ]
+    }
+  ]
+}

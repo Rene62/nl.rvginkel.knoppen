@@ -14,9 +14,6 @@ class KnoppenApp extends Homey.App {
         this.buttonStore =
             new ButtonStore(this.homey);
 
-        const buttons =
-            this.buttonStore.getAll();
-
 
 
         // Toegang tot Homey's Web API
@@ -43,6 +40,7 @@ class KnoppenApp extends Homey.App {
                 const isUsedByBooleanButton =
                     buttons.some(button =>
                         button.type === 'boolean' &&
+                        (button.variableSource || 'homey') === 'homey' &&
                         button.variableId === variable.id
                     );
 
@@ -53,14 +51,70 @@ class KnoppenApp extends Homey.App {
                 this.homey.api.realtime(
                     'booleanVariableChanged',
                     {
+                        variableSource: 'homey',
                         variableId: variable.id,
                         value: variable.value
                     }
                 );
             }
+
+
         );
 
 
+        const setButtonBooleanValueAction =
+            this.homey.flow.getActionCard(
+                'set_button_boolean_value'
+            );
+
+        setButtonBooleanValueAction
+            .registerArgumentAutocompleteListener(
+                'button',
+                async query => {
+
+                    return this.buttonStore
+                        .getAll()
+                        .getAll()
+                        .filter(button =>
+                            button.type === 'boolean' &&
+                            button.variableSource === 'flow'
+                        )
+                        .filter(button =>
+                            button.text
+                                .toLowerCase()
+                                .includes(
+                                    query.toLowerCase()
+                                )
+                        )
+                        .map(button => ({
+                            name: button.text,
+                            id: button.id
+                        }));
+                }
+            );
+
+
+        setButtonBooleanValueAction
+            .registerRunListener(
+                async args => {
+
+                    const button =
+                        this.buttonStore.setBooleanValue(
+                            args.button.id,
+                            args.value === 'true'
+                        );
+
+                    await this.homey.api.realtime(
+                        'buttonBooleanValueChanged',
+                        {
+                            buttonId: button.id,
+                            value: button.booleanValue
+                        }
+                    );
+
+                    return true;
+                }
+            );
 
 
         // actiekaart lichtloop
@@ -362,6 +416,8 @@ class KnoppenApp extends Homey.App {
         this.booleanButtonTrigger.registerRunListener(
             async (args, state) => {
 
+
+
                 return (
                     args.button?.id ===
                     state.buttonId
@@ -466,6 +522,82 @@ class KnoppenApp extends Homey.App {
             );
         }
 
+        this.betterLogicAvailable = false;
+
+        // Better Logic is optioneel. Alleen een realtime-listener
+        // registreren wanneer de app daadwerkelijk is geïnstalleerd.
+        try {
+
+            const betterLogicApi =
+                this.homey.api.getApiApp(
+                    'net.i-dev.betterlogic'
+                );
+
+            const betterLogicInstalled =
+                await betterLogicApi.getInstalled();
+
+            this.betterLogicAvailable =
+                betterLogicInstalled === true;
+
+            if (this.betterLogicAvailable) {
+
+                betterLogicApi.on(
+                    'realtime',
+                    (event, data) => {
+
+                        if (event !== 'variable_changed') {
+                            return;
+                        }
+
+                        const variable =
+                            data?.variable;
+
+                        if (
+                            !variable ||
+                            variable.type !== 'boolean'
+                        ) {
+                            return;
+                        }
+
+                        const buttons =
+                            this.buttonStore
+                                .getAll()
+                                .getAll();
+
+                        const isUsedByBooleanButton =
+                            buttons.some(button =>
+                                button.type === 'boolean' &&
+                                button.variableSource === 'betterlogic' &&
+                                button.variableId === variable.name
+                            );
+
+                        if (!isUsedByBooleanButton) {
+                            return;
+                        }
+
+                        this.homey.api.realtime(
+                            'booleanVariableChanged',
+                            {
+                                variableSource: 'betterlogic',
+                                variableId: variable.name,
+                                value: variable.value
+                            }
+                        );
+                    }
+                );
+            }
+
+        } catch (error) {
+
+            this.betterLogicAvailable = false;
+
+            this.error(
+                'Better Logic initialisatie mislukt:',
+                error
+            );
+        }
+
+
 
     }
     async triggerActionButton(buttonId) {
@@ -512,11 +644,87 @@ class KnoppenApp extends Homey.App {
             );
         }
 
+        const variableSource = button.variableSource || 'homey';
+
+
+        if (variableSource === 'flow') {
+
+            const buttonValue =
+                !button.booleanValue;
+
+            await this.booleanButtonTrigger.trigger(
+                {
+                    buttonValue
+                },
+                {
+                    buttonId: button.id
+                }
+            );
+
+            return;
+        }
+
+
         if (!button.variableId) {
             throw new Error(
                 this.homey.__('errors.no_boolean_variable', { name: button.text })
             );
         }
+
+        if (variableSource === 'betterlogic') {
+
+            if (!this.betterLogicAvailable) {
+                throw new Error(
+                    this.homey.__(
+                        'errors.better_logic_unavailable'
+                    )
+                );
+            }
+
+            const betterLogicApi =
+                this.homey.api.getApiApp(
+                    'net.i-dev.betterlogic'
+                );
+
+            const variable =
+                await betterLogicApi.get(
+                    `/${encodeURIComponent(button.variableId)}`
+                );
+
+            if (!variable) {
+                throw new Error(
+                    this.homey.__(
+                        'errors.boolean_variable_not_found',
+                        { name: button.text }
+                    )
+                );
+            }
+
+            if (variable.type !== 'boolean') {
+                throw new Error(
+                    this.homey.__(
+                        'errors.variable_not_boolean',
+                        { name: button.text }
+                    )
+                );
+            }
+
+            const buttonValue =
+                !variable.value;
+
+            await this.booleanButtonTrigger.trigger(
+                {
+                    buttonValue: buttonValue
+                },
+                {
+                    buttonId: button.id
+                }
+            );
+
+            return;
+        }
+
+
 
         const variables =
             await this.homeyApi.logic.getVariables();

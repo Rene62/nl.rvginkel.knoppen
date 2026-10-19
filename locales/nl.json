@@ -19,6 +19,13 @@
     "width": "Breedte",
     "width_small": "Smal",
     "width_large": "Breed",
+    "text_alignment": "Tekstuitlijning",
+    "text_alignment_left": "Links",
+    "text_alignment_center": "Gecentreerd",
+    "status_source": "Statusbron",
+    "status_source_homey": "Homey variabele",
+    "status_source_betterlogic": "Better Logic variabele",
+    "status_source_flow": "Flow - geen variabele",
     "action_value": "Actiewaarde",
     "boolean_variable": "Ja/Nee-variabele",
     "select_variable": "Selecteer een variabele...",
@@ -53,6 +60,9 @@
     "invalid_button_type": "Ongeldig knoptype: \"__type__\"",
     "invalid_button_width": "Ongeldige knopbreedte: \"__width__\"",
     "invalid_enabled_value": "enabled moet true of false zijn",
-    "invalid_buttons_object": "ButtonStore.save verwacht een Buttons-object"
+    "invalid_buttons_object": "ButtonStore.save verwacht een Buttons-object",
+    "better_logic_unavailable": "Better Logic is niet beschikbaar",
+    "invalid_boolean_value": "booleanValue moet true of false zijn",
+    "not_flow_status_button": "Knop \"__name__\" gebruikt Flow niet als statusbron"
   }
 }

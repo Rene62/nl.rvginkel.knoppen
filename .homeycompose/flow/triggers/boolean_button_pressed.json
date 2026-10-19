@@ -1,34 +1,39 @@
 {
-    "title": {
-        "en": "Yes/No button [[button]] is pressed",
-        "nl": "Ja/Nee-knop [[button]] is ingedrukt"
-    },
-    "titleFormatted": {
-        "en": "Yes/No button [[button]] is pressed",
-        "nl": "Ja/Nee-knop [[button]] is ingedrukt"
-    },
-    "hint": {
-        "en": "The 'Button Yes/No' tag contains the new status of the button. Use this tag in the Flow to change the linked Yes/No variable using a Logic Flow card.",
-        "nl": "De tag 'Knop Ja/Nee' bevat de nieuwe status van de knop. Gebruik deze tag in de Flow om via een Logic Flow-kaart de gekoppelde Ja/Nee-variabele te wijzigen."
-    },
-    "args": [
-        {
-            "name": "button",
-            "type": "autocomplete",
-            "title": {
-                "en": "Button",
-                "nl": "Knop"
-            }
-        }
-    ],
-    "tokens": [
-        {
-            "name": "buttonValue",
-            "type": "boolean",
-            "title": {
-                "en": "Button Yes/No",
-                "nl": "Knop Ja/Nee"
-            }
-        }
-    ]
+  "title": {
+    "en": "Yes/No button [[button]] is pressed",
+    "nl": "Ja/Nee-knop [[button]] is ingedrukt",
+    "es": "Se ha pulsado el botón Sí/No [[button]]"
+  },
+  "titleFormatted": {
+    "en": "Yes/No button [[button]] is pressed",
+    "nl": "Ja/Nee-knop [[button]] is ingedrukt",
+    "es": "Se ha pulsado el botón Sí/No [[button]]"
+  },
+  "hint": {
+    "en": "The 'Button Yes/No' tag contains the new status of the button. Use this tag in the Flow to change the linked Yes/No variable using a Logic Flow card.",
+    "nl": "De tag 'Knop Ja/Nee' bevat de nieuwe status van de knop. Gebruik deze tag in de Flow om via een Logic Flow-kaart de gekoppelde Ja/Nee-variabele te wijzigen.",
+    "es": "La etiqueta 'Botón Sí/No' contiene el nuevo estado del botón. Usa esta etiqueta en el Flow para cambiar la variable Sí/No vinculada mediante una tarjeta de Flow de Logic."
+  },
+  "args": [
+    {
+      "name": "button",
+      "type": "autocomplete",
+      "title": {
+        "en": "Button",
+        "nl": "Knop",
+        "es": "Botón"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "buttonValue",
+      "type": "boolean",
+      "title": {
+        "en": "Button Yes/No",
+        "nl": "Knop Ja/Nee",
+        "es": "Botón Sí/No"
+      }
+    }
+  ]
 }

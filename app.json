@@ -1,6 +1,6 @@
 {
   "id": "nl.rvginkel.knoppen",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "compatibility": ">=12.3.0",
   "sdk": 3,
   "brandColor": "#00AEEF",
@@ -9,7 +9,8 @@
   ],
   "runtime": "nodejs",
   "permissions": [
-    "homey:manager:api"
+    "homey:manager:api",
+    "homey:app:net.i-dev.betterlogic"
   ],
   "api": {
     "getButtons": {
@@ -31,6 +32,14 @@
     "getBooleanVariables": {
       "method": "GET",
       "path": "/boolean-variables"
+    },
+    "getBetterLogicAvailable": {
+      "method": "GET",
+      "path": "/betterlogic-available"
+    },
+    "getBetterLogicBooleanVariables": {
+      "method": "GET",
+      "path": "/betterlogic-boolean-variables"
     }
   },
   "author": {
@@ -40,16 +49,19 @@
   "support": "mailto:temp200@xs4all.nl",
   "name": {
     "en": "Dashboard Buttons",
-    "nl": "Dashboard Knoppen"
+    "nl": "Dashboard Knoppen",
+    "es": "Botones del Dashboard"
   },
   "description": {
     "en": "Create dashboard buttons and use them in a Flow.",
-    "nl": "Maak dashboard knoppen en gebruik deze in een Flow."
+    "nl": "Maak dashboard knoppen en gebruik deze in een Flow.",
+    "es": "Crea botones para el dashboard y úsalos en un Flow."
   },
   "category": "tools",
   "tags": {
     "en": [
       "dashboard",
+      "button",
       "buttons",
       "flow",
       "control"
@@ -57,8 +69,16 @@
     "nl": [
       "dashboard",
       "knoppen",
+      "knop",
       "flow",
       "bediening"
+    ],
+    "es": [
+      "dashboard",
+      "botón",
+      "botones",
+      "flow",
+      "control"
     ]
   },
   "images": {
@@ -71,11 +91,13 @@
       "id": "buttons",
       "name": {
         "en": "Button",
-        "nl": "Knop"
+        "nl": "Knop",
+        "es": "Botón"
       },
       "description": {
         "en": "Create dashboard buttons and use them in a Flow.",
-        "nl": "Maak dashboard knoppen en gebruik deze in een Flow."
+        "nl": "Maak dashboard knoppen en gebruik deze in een Flow.",
+        "es": "Crea botones para el dashboard y úsalos en un Flow."
       },
       "transparent": true,
       "api": {
@@ -86,6 +108,10 @@
         "getButtons": {
           "method": "GET",
           "path": "/buttons"
+        },
+        "getBetterLogicBooleanValue": {
+          "method": "GET",
+          "path": "/betterlogic-boolean"
         },
         "triggerActionButton": {
           "method": "POST",
@@ -102,7 +128,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 1",
-            "nl": "Positie 1"
+            "nl": "Positie 1",
+            "es": "Posición 1"
           }
         },
         {
@@ -110,7 +137,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 2",
-            "nl": "Positie 2"
+            "nl": "Positie 2",
+            "es": "Posición 2"
           }
         },
         {
@@ -118,7 +146,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 3",
-            "nl": "Positie 3"
+            "nl": "Positie 3",
+            "es": "Posición 3"
           }
         },
         {
@@ -126,7 +155,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 4",
-            "nl": "Positie 4"
+            "nl": "Positie 4",
+            "es": "Posición 4"
           }
         },
         {
@@ -134,7 +164,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 5",
-            "nl": "Positie 5"
+            "nl": "Positie 5",
+            "es": "Posición 5"
           }
         },
         {
@@ -142,7 +173,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 6",
-            "nl": "Positie 6"
+            "nl": "Positie 6",
+            "es": "Posición 6"
           }
         },
         {
@@ -150,7 +182,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 7",
-            "nl": "Positie 7"
+            "nl": "Positie 7",
+            "es": "Posición 7"
           }
         },
         {
@@ -158,7 +191,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 8",
-            "nl": "Positie 8"
+            "nl": "Positie 8",
+            "es": "Posición 8"
           }
         },
         {
@@ -166,7 +200,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 9",
-            "nl": "Positie 9"
+            "nl": "Positie 9",
+            "es": "Posición 9"
           }
         },
         {
@@ -174,7 +209,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 10",
-            "nl": "Positie 10"
+            "nl": "Positie 10",
+            "es": "Posición 10"
           }
         },
         {
@@ -182,7 +218,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 11",
-            "nl": "Positie 11"
+            "nl": "Positie 11",
+            "es": "Posición 11"
           }
         },
         {
@@ -190,7 +227,8 @@
           "type": "autocomplete",
           "title": {
             "en": "Position 12",
-            "nl": "Positie 12"
+            "nl": "Positie 12",
+            "es": "Posición 12"
           }
         }
       ],
@@ -202,15 +240,18 @@
       {
         "title": {
           "en": "Action button [[button]] is pressed",
-          "nl": "Actieknop [[button]] is ingedrukt"
+          "nl": "Actieknop [[button]] is ingedrukt",
+          "es": "Se ha pulsado el botón de acción [[button]]"
         },
         "titleFormatted": {
           "en": "Action button [[button]] is pressed",
-          "nl": "Actieknop [[button]] is ingedrukt"
+          "nl": "Actieknop [[button]] is ingedrukt",
+          "es": "Se ha pulsado el botón de acción [[button]]"
         },
         "hint": {
           "en": "The Action value configured for the button is available in this Flow as a text tag.",
-          "nl": "De ingestelde Actiewaarde bij de knop is in deze Flow beschikbaar als teksttag."
+          "nl": "De ingestelde Actiewaarde bij de knop is in deze Flow beschikbaar als teksttag.",
+          "es": "El valor de acción configurado para el botón está disponible en este Flow como etiqueta de texto."
         },
         "args": [
           {
@@ -218,7 +259,8 @@
             "type": "autocomplete",
             "title": {
               "en": "Button",
-              "nl": "Knop"
+              "nl": "Knop",
+              "es": "Botón"
             }
           }
         ],
@@ -228,7 +270,8 @@
             "type": "string",
             "title": {
               "en": "Action value",
-              "nl": "Actiewaarde"
+              "nl": "Actiewaarde",
+              "es": "Valor de acción"
             }
           }
         ],
@@ -237,15 +280,18 @@
       {
         "title": {
           "en": "Yes/No button [[button]] is pressed",
-          "nl": "Ja/Nee-knop [[button]] is ingedrukt"
+          "nl": "Ja/Nee-knop [[button]] is ingedrukt",
+          "es": "Se ha pulsado el botón Sí/No [[button]]"
         },
         "titleFormatted": {
           "en": "Yes/No button [[button]] is pressed",
-          "nl": "Ja/Nee-knop [[button]] is ingedrukt"
+          "nl": "Ja/Nee-knop [[button]] is ingedrukt",
+          "es": "Se ha pulsado el botón Sí/No [[button]]"
         },
         "hint": {
           "en": "The 'Button Yes/No' tag contains the new status of the button. Use this tag in the Flow to change the linked Yes/No variable using a Logic Flow card.",
-          "nl": "De tag 'Knop Ja/Nee' bevat de nieuwe status van de knop. Gebruik deze tag in de Flow om via een Logic Flow-kaart de gekoppelde Ja/Nee-variabele te wijzigen."
+          "nl": "De tag 'Knop Ja/Nee' bevat de nieuwe status van de knop. Gebruik deze tag in de Flow om via een Logic Flow-kaart de gekoppelde Ja/Nee-variabele te wijzigen.",
+          "es": "La etiqueta 'Botón Sí/No' contiene el nuevo estado del botón. Usa esta etiqueta en el Flow para cambiar la variable Sí/No vinculada mediante una tarjeta de Flow de Logic."
         },
         "args": [
           {
@@ -253,7 +299,8 @@
             "type": "autocomplete",
             "title": {
               "en": "Button",
-              "nl": "Knop"
+              "nl": "Knop",
+              "es": "Botón"
             }
           }
         ],
@@ -263,7 +310,8 @@
             "type": "boolean",
             "title": {
               "en": "Button Yes/No",
-              "nl": "Knop Ja/Nee"
+              "nl": "Knop Ja/Nee",
+              "es": "Botón Sí/No"
             }
           }
         ],
@@ -273,12 +321,75 @@
     "actions": [
       {
         "title": {
+          "en": "Set Yes/No status of button",
+          "nl": "Stel Ja/Nee-status van knop in",
+          "es": "Establecer estado Sí/No del botón"
+        },
+        "titleFormatted": {
+          "en": "Set [[button]] to [[value]]",
+          "nl": "Stel [[button]] in op [[value]]",
+          "es": "Establecer [[button]] en [[value]]"
+        },
+        "hint": {
+          "en": "Sets the Yes/No status of a button that uses 'Flow - no variable' as its status source.",
+          "nl": "Stelt de Ja/Nee-status in van een knop die 'Flow - geen variabele' als statusbron gebruikt.",
+          "es": "Establece el estado Sí/No de un botón que usa 'Flow - sin variable' como fuente de estado."
+        },
+        "args": [
+          {
+            "type": "autocomplete",
+            "name": "button",
+            "title": {
+              "en": "Button",
+              "nl": "Knop",
+              "es": "Botón"
+            },
+            "placeholder": {
+              "en": "Select a button",
+              "nl": "Selecteer een knop",
+              "es": "Selecciona un botón"
+            }
+          },
+          {
+            "type": "dropdown",
+            "name": "value",
+            "title": {
+              "en": "Status",
+              "nl": "Status",
+              "es": "Estado"
+            },
+            "values": [
+              {
+                "id": "true",
+                "title": {
+                  "en": "Yes",
+                  "nl": "Ja",
+                  "es": "Sí"
+                }
+              },
+              {
+                "id": "false",
+                "title": {
+                  "en": "No",
+                  "nl": "Nee",
+                  "es": "No"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_button_boolean_value"
+      },
+      {
+        "title": {
           "en": "Enable or disable button",
-          "nl": "Knop in- of uitschakelen"
+          "nl": "Knop in- of uitschakelen",
+          "es": "Activar o desactivar botón"
         },
         "titleFormatted": {
           "en": "Set [[button]] to [[enabled]]",
-          "nl": "Zet [[button]] op [[enabled]]"
+          "nl": "Zet [[button]] op [[enabled]]",
+          "es": "Establecer [[button]] en [[enabled]]"
         },
         "args": [
           {
@@ -286,7 +397,8 @@
             "type": "autocomplete",
             "title": {
               "en": "Button",
-              "nl": "Knop"
+              "nl": "Knop",
+              "es": "Botón"
             }
           },
           {
@@ -294,21 +406,24 @@
             "type": "dropdown",
             "title": {
               "en": "Status",
-              "nl": "Status"
+              "nl": "Status",
+              "es": "Estado"
             },
             "values": [
               {
                 "id": "true",
                 "title": {
                   "en": "Enabled",
-                  "nl": "Ingeschakeld"
+                  "nl": "Ingeschakeld",
+                  "es": "Activado"
                 }
               },
               {
                 "id": "false",
                 "title": {
                   "en": "Disabled",
-                  "nl": "Uitgeschakeld"
+                  "nl": "Uitgeschakeld",
+                  "es": "Desactivado"
                 }
               }
             ]
@@ -319,11 +434,13 @@
       {
         "title": {
           "en": "Set permanent button color",
-          "nl": "Stel permanente kleur van knop in"
+          "nl": "Stel permanente kleur van knop in",
+          "es": "Establecer color permanente del botón"
         },
         "titleFormatted": {
           "en": "Set permanent color of [[button]] to [[enabled]] in [[color]]",
-          "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]"
+          "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]",
+          "es": "Establecer el color permanente de [[button]] en [[color]]: [[enabled]]"
         },
         "args": [
           {
@@ -331,7 +448,8 @@
             "type": "autocomplete",
             "title": {
               "en": "Button",
-              "nl": "Knop"
+              "nl": "Knop",
+              "es": "Botón"
             }
           },
           {
@@ -339,21 +457,24 @@
             "type": "dropdown",
             "title": {
               "en": "Permanent color",
-              "nl": "Permanente kleur"
+              "nl": "Permanente kleur",
+              "es": "Color permanente"
             },
             "values": [
               {
                 "id": "true",
                 "title": {
                   "en": "On",
-                  "nl": "Aan"
+                  "nl": "Aan",
+                  "es": "Activado"
                 }
               },
               {
                 "id": "false",
                 "title": {
                   "en": "Off",
-                  "nl": "Uit"
+                  "nl": "Uit",
+                  "es": "Desactivado"
                 }
               }
             ]
@@ -363,7 +484,8 @@
             "type": "color",
             "title": {
               "en": "Color",
-              "nl": "Kleur"
+              "nl": "Kleur",
+              "es": "Color"
             }
           }
         ],
@@ -372,11 +494,13 @@
       {
         "title": {
           "en": "Start light loop around button",
-          "nl": "Start lichtloop rond knop"
+          "nl": "Start lichtloop rond knop",
+          "es": "Iniciar animación de luz alrededor del botón"
         },
         "titleFormatted": {
           "en": "Start light loop around [[button]] for [[duration]] seconds in [[color]]",
-          "nl": "Start lichtloop rond [[button]] gedurende [[duration]] seconden in [[color]]"
+          "nl": "Start lichtloop rond [[button]] gedurende [[duration]] seconden in [[color]]",
+          "es": "Iniciar animación de luz alrededor de [[button]] durante [[duration]] segundos en [[color]]"
         },
         "args": [
           {
@@ -384,7 +508,8 @@
             "type": "autocomplete",
             "title": {
               "en": "Button",
-              "nl": "Knop"
+              "nl": "Knop",
+              "es": "Botón"
             }
           },
           {
@@ -392,7 +517,8 @@
             "type": "number",
             "title": {
               "en": "Duration (seconds)",
-              "nl": "Duur (seconden)"
+              "nl": "Duur (seconden)",
+              "es": "Duración (segundos)"
             },
             "min": 1,
             "max": 15
@@ -402,7 +528,8 @@
             "type": "color",
             "title": {
               "en": "Color",
-              "nl": "Kleur"
+              "nl": "Kleur",
+              "es": "Color"
             }
           }
         ],

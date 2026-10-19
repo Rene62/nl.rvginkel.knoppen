@@ -1,44 +1,50 @@
 {
-    "title": {
-        "en": "Enable or disable button",
-        "nl": "Knop in- of uitschakelen"
+  "title": {
+    "en": "Enable or disable button",
+    "nl": "Knop in- of uitschakelen",
+    "es": "Activar o desactivar botón"
+  },
+  "titleFormatted": {
+    "en": "Set [[button]] to [[enabled]]",
+    "nl": "Zet [[button]] op [[enabled]]",
+    "es": "Establecer [[button]] en [[enabled]]"
+  },
+  "args": [
+    {
+      "name": "button",
+      "type": "autocomplete",
+      "title": {
+        "en": "Button",
+        "nl": "Knop",
+        "es": "Botón"
+      }
     },
-    "titleFormatted": {
-        "en": "Set [[button]] to [[enabled]]",
-        "nl": "Zet [[button]] op [[enabled]]"
-    },
-    "args": [
+    {
+      "name": "enabled",
+      "type": "dropdown",
+      "title": {
+        "en": "Status",
+        "nl": "Status",
+        "es": "Estado"
+      },
+      "values": [
         {
-            "name": "button",
-            "type": "autocomplete",
-            "title": {
-                "en": "Button",
-                "nl": "Knop"
-            }
+          "id": "true",
+          "title": {
+            "en": "Enabled",
+            "nl": "Ingeschakeld",
+            "es": "Activado"
+          }
         },
         {
-            "name": "enabled",
-            "type": "dropdown",
-            "title": {
-                "en": "Status",
-                "nl": "Status"
-            },
-            "values": [
-                {
-                    "id": "true",
-                    "title": {
-                        "en": "Enabled",
-                        "nl": "Ingeschakeld"
-                    }
-                },
-                {
-                    "id": "false",
-                    "title": {
-                        "en": "Disabled",
-                        "nl": "Uitgeschakeld"
-                    }
-                }
-            ]
+          "id": "false",
+          "title": {
+            "en": "Disabled",
+            "nl": "Uitgeschakeld",
+            "es": "Desactivado"
+          }
         }
-    ]
+      ]
+    }
+  ]
 }

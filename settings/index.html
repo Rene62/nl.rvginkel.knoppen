@@ -53,82 +53,154 @@
 
             const addButton =
                 document.getElementById('addButton');
+
             let booleanVariables = [];
-
-
-
+            let betterLogicBooleanVariables = [];
+            let betterLogicAvailable = false;
 
             /*
              * Alle knoppen laden
-             */function loadButtons() {
+             */
+            function loadButtons() {
 
+                /*
+                 * Eerst controleren of Better Logic beschikbaar is
+                 */
                 Homey.api(
                     'GET',
-                    '/boolean-variables',
+                    '/betterlogic-available',
                     null,
-                    function (error, variables) {
+                    function (error, available) {
 
                         if (error) {
 
                             console.error(
-                                'Fout bij ophalen Ja/Nee-variabelen:',
+                                'Fout bij controleren Better Logic:',
                                 error
                             );
 
-                            buttonList.textContent =
-                                Homey.__(
-                                    'settings.load_boolean_variables_error'
-                                );
+                            betterLogicAvailable = false;
 
-                            return;
+                        } else {
+
+                            betterLogicAvailable =
+                                available === true;
                         }
 
-                        booleanVariables =
-                            Array.isArray(variables)
-                                ? variables
-                                : [];
 
-
+                        /*
+                         * Daarna Homey Logic Ja/Nee-variabelen laden
+                         */
                         Homey.api(
                             'GET',
-                            '/buttons',
+                            '/boolean-variables',
                             null,
-                            function (error, buttons) {
+                            function (error, variables) {
 
                                 if (error) {
-                                    console.error(error);
+
+                                    console.error(
+                                        'Fout bij ophalen Ja/Nee-variabelen:',
+                                        error
+                                    );
+
                                     buttonList.textContent =
                                         Homey.__(
-                                            'settings.load_buttons_error'
+                                            'settings.load_boolean_variables_error'
                                         );
 
                                     return;
                                 }
 
+                                booleanVariables =
+                                    Array.isArray(variables)
+                                        ? variables
+                                        : [];
 
-                                if (!Array.isArray(buttons) ||
-                                    buttons.length === 0) {
 
-                                    buttonList.textContent =
-                                        Homey.__(
-                                            'settings.no_buttons'
-                                        );
+                                /*
+                                 * Als Better Logic beschikbaar is,
+                                 * eerst de Better Logic Ja/Nee-variabelen laden.
+                                 */
+                                if (betterLogicAvailable) {
 
-                                    return;
+                                    Homey.api(
+                                        'GET',
+                                        '/betterlogic-boolean-variables',
+                                        null,
+                                        function (error, variables) {
+
+                                            if (error) {
+
+                                                console.error(
+                                                    'Fout bij ophalen Better Logic Ja/Nee-variabelen:',
+                                                    error
+                                                );
+
+                                                betterLogicBooleanVariables = [];
+
+                                            } else {
+
+                                                betterLogicBooleanVariables =
+                                                    Array.isArray(variables)
+                                                        ? variables
+                                                        : [];
+                                            }
+
+                                            loadStoredButtons();
+                                        }
+                                    );
+
+                                } else {
+
+                                    betterLogicBooleanVariables = [];
+                                    loadStoredButtons();
                                 }
-
-
-                                buttonList.innerHTML = '';
-
-
-                                buttons.forEach(button => {
-
-                                    createButtonEditor(button);
-                                });
                             }
                         );
                     }
                 );
+                function loadStoredButtons() {
+
+                    Homey.api(
+                        'GET',
+                        '/buttons',
+                        null,
+                        function (error, buttons) {
+
+                            if (error) {
+
+                                console.error(error);
+
+                                buttonList.textContent =
+                                    Homey.__(
+                                        'settings.load_buttons_error'
+                                    );
+
+                                return;
+                            }
+
+                            if (
+                                !Array.isArray(buttons) ||
+                                buttons.length === 0
+                            ) {
+
+                                buttonList.textContent =
+                                    Homey.__(
+                                        'settings.no_buttons'
+                                    );
+
+                                return;
+                            }
+
+                            buttonList.innerHTML = '';
+
+                            buttons.forEach(button => {
+                                createButtonEditor(button);
+                            });
+                        }
+                    );
+                }
             }
 
 
@@ -328,11 +400,6 @@
 
     </select>
 `;
-
-
-
-
-
                 const widthInput =
                     widthGroup.querySelector('.width-input');
 
@@ -340,6 +407,41 @@
                     button.width || 'small';
 
                 fieldset.appendChild(widthGroup);
+
+                /*
+  * TEKSTUITLIJNING
+  */
+                const textAlignGroup =
+                    document.createElement('div');
+
+                textAlignGroup.className =
+                    'homey-form-group';
+
+                textAlignGroup.innerHTML = `
+    <label class="homey-form-label">
+        ${Homey.__('settings.text_alignment')}
+    </label>
+
+    <select class="homey-form-select text-align-input">
+        <option value="left">
+            ${Homey.__('settings.text_alignment_left')}
+        </option>
+
+        <option value="center">
+            ${Homey.__('settings.text_alignment_center')}
+        </option>
+    </select>
+`;
+
+                const textAlignInput =
+                    textAlignGroup.querySelector(
+                        '.text-align-input'
+                    );
+
+                textAlignInput.value =
+                    button.textAlign || 'center';
+
+                fieldset.appendChild(textAlignGroup);
 
 
                 /*
@@ -371,9 +473,65 @@
 
                 fieldset.appendChild(actionValueGroup);
 
-                /*/*
- * JA/NEE-VARIABELE
+                /*
+ * STATUSBRON
  */
+                const variableSourceGroup =
+                    document.createElement('div');
+
+                variableSourceGroup.className =
+                    'homey-form-group';
+
+                variableSourceGroup.innerHTML = `
+    <label class="homey-form-label">
+        ${Homey.__('settings.status_source')}
+    </label>
+
+    <select class="homey-form-select variable-source-input">
+        <option value="homey">
+            ${Homey.__('settings.status_source_homey')}
+        </option>
+
+        <option value="flow">
+            ${Homey.__('settings.status_source_flow')}
+        </option>
+    </select>
+`;
+
+                const variableSourceInput =
+                    variableSourceGroup.querySelector(
+                        '.variable-source-input'
+                    );
+
+                if (betterLogicAvailable) {
+
+                    const betterLogicOption =
+                        document.createElement('option');
+
+                    betterLogicOption.value =
+                        'betterlogic';
+
+                    betterLogicOption.textContent =
+                        Homey.__(
+                            'settings.status_source_betterlogic'
+                        );
+
+                    variableSourceInput.insertBefore(
+                        betterLogicOption,
+                        variableSourceInput.querySelector(
+                            'option[value="flow"]'
+                        )
+                    );
+                }
+
+                variableSourceInput.value =
+                    button.variableSource || 'homey';
+
+                fieldset.appendChild(variableSourceGroup);
+
+                /*
+                 * JA/NEE-VARIABELE
+                 */
                 const booleanVariableGroup =
                     document.createElement('div');
 
@@ -402,41 +560,85 @@
 
                 fieldset.appendChild(booleanVariableGroup);
 
-
                 /*
-               * Ja/Nee-variabelen in dropdown zetten
-               */
-                booleanVariables.forEach(variable => {
+                 * Ja/Nee-variabelen in dropdown zetten
+                 */
+                function updateBooleanVariableOptions() {
 
-                    const option =
+                    booleanVariableInput.innerHTML = '';
+
+                    const emptyOption =
                         document.createElement('option');
 
-                    option.value =
-                        variable.id;
+                    emptyOption.value = '';
+                    emptyOption.textContent =
+                        Homey.__('settings.select_variable');
 
-                    option.textContent =
-                        variable.name;
+                    booleanVariableInput.appendChild(emptyOption);
+
+
+                    let variables = [];
+
+                    if (variableSourceInput.value === 'homey') {
+
+                        variables = booleanVariables;
+
+                    } else if (
+                        variableSourceInput.value === 'betterlogic'
+                    ) {
+
+                        variables = betterLogicBooleanVariables;
+                    }
+
+
+                    variables.forEach(variable => {
+
+                        const option =
+                            document.createElement('option');
+
+                        option.value =
+                            variable.id;
+
+                        option.textContent =
+                            variable.name;
+
+                        booleanVariableInput.appendChild(option);
+                    });
+
 
                     /*
                      * Bestaande koppeling selecteren
                      */
-                    if (variable.id === button.variableId) {
-                        option.selected = true;
+                    if (
+                        button.variableSource === variableSourceInput.value &&
+                        button.variableId
+                    ) {
+                        booleanVariableInput.value =
+                            button.variableId;
                     }
+                }
 
-                    booleanVariableInput.appendChild(option);
-                });
+                updateBooleanVariableOptions();
 
                 function updateTypeFields() {
 
                     if (typeInput.value === 'boolean') {
 
                         actionValueGroup.style.display = 'none';
-                        booleanVariableGroup.style.display = '';
+                        textAlignGroup.style.display = '';
+                        variableSourceGroup.style.display = '';
+
+                        if (variableSourceInput.value === 'flow') {
+                            booleanVariableGroup.style.display = 'none';
+                        } else {
+                            booleanVariableGroup.style.display = '';
+                        }
 
                     } else {
 
                         actionValueGroup.style.display = '';
+                        textAlignGroup.style.display = 'none';
+                        variableSourceGroup.style.display = 'none';
                         booleanVariableGroup.style.display = 'none';
                     }
                 }
@@ -446,12 +648,18 @@
                     'change',
                     updateTypeFields
                 );
+                variableSourceInput.addEventListener(
+                    'change',
+                    function () {
+
+                        updateBooleanVariableOptions();
+                        updateTypeFields();
+                    }
+                );
 
 
                 // Meteen juiste velden tonen
                 updateTypeFields();
-
-                ;
 
 
                 /*
@@ -513,10 +721,20 @@
                                 width:
                                     widthInput.value,
 
+                                textAlign:
+                                    typeInput.value === 'boolean'
+                                        ? textAlignInput.value
+                                        : 'center',
+
                                 actionValue:
                                     typeInput.value === 'action'
                                         ? actionValueInput.value
                                         : '',
+
+                                variableSource:
+                                    typeInput.value === 'boolean'
+                                        ? variableSourceInput.value
+                                        : 'homey',
 
                                 variableId:
                                     typeInput.value === 'boolean'
@@ -549,12 +767,6 @@
 
                                     return;
                                 }
-
-
-                                console.log(
-                                    'Knop opgeslagen:',
-                                    updatedButton
-                                );
 
                                 changes = false;
                                 saveButton.textContent =
@@ -630,12 +842,6 @@
 
                                 return;
                             }
-
-
-                            console.log(
-                                'Nieuwe knop aangemaakt:',
-                                button
-                            );
 
 
                             createButtonEditor(button);
