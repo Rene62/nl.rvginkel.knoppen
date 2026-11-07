@@ -1,6 +1,6 @@
 {
   "id": "nl.rvginkel.knoppen",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "compatibility": ">=12.3.0",
   "sdk": 3,
   "brandColor": "#00AEEF",
@@ -433,14 +433,19 @@
       },
       {
         "title": {
-          "en": "Set permanent button color",
-          "nl": "Stel permanente kleur van knop in",
-          "es": "Establecer color permanente del botón"
+          "en": "Set permanent border color of action button",
+          "nl": "Stel permanente randkleur van actieknop in",
+          "es": "Establecer color permanente del borde del botón de acción"
         },
         "titleFormatted": {
           "en": "Set permanent color of [[button]] to [[enabled]] in [[color]]",
           "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]",
           "es": "Establecer el color permanente de [[button]] en [[color]]: [[enabled]]"
+        },
+        "hint": {
+          "nl": "Alleen beschikbaar voor actieknoppen. Ja/Nee-knoppen gebruiken de statusindicator.",
+          "en": "Only available for action buttons. Yes/No buttons use the status indicator.",
+          "es": "Solo disponible para botones de acción. Los botones Sí/No utilizan el indicador de estado."
         },
         "args": [
           {
@@ -493,14 +498,68 @@
       },
       {
         "title": {
-          "en": "Start light loop around button",
-          "nl": "Start lichtloop rond knop",
-          "es": "Iniciar animación de luz alrededor del botón"
+          "en": "Start fill animation of action button",
+          "nl": "Start vulanimatie van actieknop",
+          "es": "Iniciar animación de relleno del botón de acción"
+        },
+        "titleFormatted": {
+          "en": "Fill [[button]] for [[duration]] seconds in [[color]]",
+          "nl": "Laat [[button]] vollopen in [[duration]] seconden met [[color]]",
+          "es": "Rellenar [[button]] durante [[duration]] segundos en [[color]]"
+        },
+        "hint": {
+          "en": "Only action buttons. Duration: 5–20 seconds for narrow buttons, 5–45 seconds for wide buttons. The fill disappears automatically at the end; the light loop stops when filling begins.",
+          "nl": "Alleen actieknoppen. Duur: 5–20 seconden voor smalle knoppen, 5–45 seconden voor brede knoppen. De vulling verdwijnt vanzelf na afloop; de lichtloop stopt zodra de vulling start.",
+          "es": "Solo botones de acción. Duración: 5–20 segundos para botones estrechos y 5–45 segundos para botones anchos. El relleno desaparece automáticamente; la animación de luz se detiene al comenzar."
+        },
+        "args": [
+          {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+              "en": "Button",
+              "nl": "Knop",
+              "es": "Botón"
+            }
+          },
+          {
+            "name": "duration",
+            "type": "number",
+            "title": {
+              "en": "Duration (seconds)",
+              "nl": "Duur (seconden)",
+              "es": "Duración (segundos)"
+            },
+            "min": 5,
+            "max": 45
+          },
+          {
+            "name": "color",
+            "type": "color",
+            "title": {
+              "en": "Fill color",
+              "nl": "Vulkleur",
+              "es": "Color de relleno"
+            }
+          }
+        ],
+        "id": "start_button_fill"
+      },
+      {
+        "title": {
+          "en": "Start light loop around action button",
+          "nl": "Start lichtloop rond actieknop",
+          "es": "Iniciar animación de luz alrededor del botón de acción"
         },
         "titleFormatted": {
           "en": "Start light loop around [[button]] for [[duration]] seconds in [[color]]",
           "nl": "Start lichtloop rond [[button]] gedurende [[duration]] seconden in [[color]]",
           "es": "Iniciar animación de luz alrededor de [[button]] durante [[duration]] segundos en [[color]]"
+        },
+        "hint": {
+          "nl": "Alleen beschikbaar voor actieknoppen. Ja/Nee-knoppen gebruiken de statusindicator. Start lichtloop stop lopende vulanimatie.",
+          "en": "Only available for action buttons. Yes/No buttons use the status indicator. Start light run stop ongoing fill animation.",
+          "es": "Solo disponible para botones de acción. Los botones Sí/No utilizan el indicador de estado. Iniciar bucle de luz, detener animación de relleno en curso."
         },
         "args": [
           {
@@ -534,6 +593,35 @@
           }
         ],
         "id": "start_button_lightloop"
+      },
+      {
+        "title": {
+          "en": "Stop fill animation of action button",
+          "nl": "Stop vulanimatie van actieknop",
+          "es": "Detener animación de relleno del botón de acción"
+        },
+        "titleFormatted": {
+          "en": "Stop fill animation of [[button]]",
+          "nl": "Stop vulanimatie van [[button]]",
+          "es": "Detener animación de relleno de [[button]]"
+        },
+        "hint": {
+          "en": "Stops the fill animation immediately and clears the fill. Only for action buttons.",
+          "nl": "Stopt de vulanimatie direct en maakt de knop weer leeg. Alleen voor actieknoppen.",
+          "es": "Detiene inmediatamente la animación y elimina el relleno. Solo para botones de acción."
+        },
+        "args": [
+          {
+            "name": "button",
+            "type": "autocomplete",
+            "title": {
+              "en": "Button",
+              "nl": "Knop",
+              "es": "Botón"
+            }
+          }
+        ],
+        "id": "stop_button_fill"
       }
     ]
   }

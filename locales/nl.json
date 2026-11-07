@@ -15,7 +15,7 @@
     "type": "Type",
     "type_action": "Actie",
     "type_boolean": "Ja/Nee",
-    "text": "Tekst",
+    "text": "Tekst knop",
     "width": "Breedte",
     "width_small": "Smal",
     "width_large": "Breed",
@@ -34,7 +34,10 @@
     "save_error": "Opslaan van de knop is mislukt.",
     "save_success": "Knop is opgeslagen.",
     "new_button_default": "Nieuwe knop",
-    "create_error": "Aanmaken van de knop is mislukt."
+    "create_error": "Aanmaken van de knop is mislukt.",
+    "button_shape": "Knopvorm",
+    "button_shape_pill": "Volledig afgerond",
+    "button_shape_rounded": "Afgeronde hoeken"
   },
   "widget": {
     "add_button": "Voeg een knop toe",
@@ -63,6 +66,8 @@
     "invalid_buttons_object": "ButtonStore.save verwacht een Buttons-object",
     "better_logic_unavailable": "Better Logic is niet beschikbaar",
     "invalid_boolean_value": "booleanValue moet true of false zijn",
-    "not_flow_status_button": "Knop \"__name__\" gebruikt Flow niet als statusbron"
+    "not_flow_status_button": "Knop \"__name__\" gebruikt Flow niet als statusbron",
+    "invalid_button_shape": "Ongeldige knopvorm: \"__shape__\"",
+    "invalid_fill_duration": "Vulanimatie voor knop \"__name__\": kies een duur van 5 tot __max__ seconden."
   }
 }

@@ -87,6 +87,12 @@ class ButtonStore {
         }
     }
 
+    validateShape(shape) {
+        if (!['pill', 'rounded'].includes(shape)) {
+            throw new Error(this.homey.__('errors.invalid_button_shape', { shape }));
+        }
+    }
+
     /**
      * Alle opgeslagen knoppen laden.
      *
@@ -124,6 +130,7 @@ class ButtonStore {
         type = 'action',
         text = 'Nieuwe knop',
         width = 'small',
+        shape = 'pill',
         textAlign = 'center',
         actionValue = '',
         variableSource = 'homey',
@@ -135,6 +142,7 @@ class ButtonStore {
 
         this.validateType(type);
         this.validateWidth(width);
+        this.validateShape(shape);
 
         const button = new Button({
             id: this.generateId(),
@@ -142,6 +150,7 @@ class ButtonStore {
             type,
             text,
             width,
+            shape,
             textAlign,
 
             // Nieuwe knop is altijd actief.
@@ -177,6 +186,7 @@ class ButtonStore {
         type,
         text,
         width,
+        shape,
         textAlign,
         actionValue,
         variableSource,
@@ -205,6 +215,10 @@ class ButtonStore {
             this.validateWidth(width);
         }
 
+        if (shape !== undefined) {
+            this.validateShape(shape);
+        }
+
 
         // Alleen opgegeven configuratievelden wijzigen
 
@@ -218,6 +232,10 @@ class ButtonStore {
 
         if (width !== undefined) {
             button.width = width;
+        }
+
+        if (shape !== undefined) {
+            button.shape = shape;
         }
 
         if (textAlign !== undefined) {

@@ -188,6 +188,71 @@ class KnoppenApp extends Homey.App {
             );
 
 
+        // Flow-actiekaarten voor de vulanimatie (alleen actieknoppen).
+        // De animatie wordt uitsluitend in de widget uitgevoerd en niet opgeslagen.
+        const fillButtonAutocomplete = async query => {
+            return this.buttonStore.getAll().getAll()
+                .filter(button => button.type === 'action')
+                .map(button => ({
+                    id: button.id,
+                    name: this.homey.__('autocomplete.button_name', {
+                        number: button.number,
+                        text: button.text
+                    })
+                }))
+                .filter(button => button.name.toLowerCase().includes(query.toLowerCase()));
+        };
+
+        const startButtonFillAction =
+            this.homey.flow.getActionCard('start_button_fill');
+        startButtonFillAction
+            .registerArgumentAutocompleteListener('button', fillButtonAutocomplete);
+        startButtonFillAction.registerRunListener(async args => {
+            const button = this.buttonStore.getById(args.button?.id);
+            if (!button) {
+                throw new Error(this.homey.__('errors.button_not_found'));
+            }
+            if (button.type !== 'action') {
+                throw new Error(this.homey.__('errors.not_action_button', { name: button.text }));
+            }
+            if (button.enabled === false) return true;
+
+            const duration = Number(args.duration);
+            const max = button.width === 'large' ? 45 : 20;
+            if (!Number.isFinite(duration) || duration < 5 || duration > max) {
+                throw new Error(this.homey.__('errors.invalid_fill_duration', {
+                    name: button.text,
+                    max
+                }));
+            }
+
+            await this.homey.api.realtime('buttonFillStart', {
+                buttonId: button.id,
+                duration,
+                color: args.color || '#00aeee'
+            });
+            return true;
+        });
+
+        const stopButtonFillAction =
+            this.homey.flow.getActionCard('stop_button_fill');
+        stopButtonFillAction
+            .registerArgumentAutocompleteListener('button', fillButtonAutocomplete);
+        stopButtonFillAction.registerRunListener(async args => {
+            const button = this.buttonStore.getById(args.button?.id);
+            if (!button) {
+                throw new Error(this.homey.__('errors.button_not_found'));
+            }
+            if (button.type !== 'action') {
+                throw new Error(this.homey.__('errors.not_action_button', { name: button.text }));
+            }
+            await this.homey.api.realtime('buttonFillStop', {
+                buttonId: button.id
+            });
+            return true;
+        });
+
+
         // actiekaart permanente kleur
 
         this.setButtonPermanentColorAction =

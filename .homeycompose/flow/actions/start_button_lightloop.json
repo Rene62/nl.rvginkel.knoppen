@@ -1,13 +1,18 @@
 {
   "title": {
-    "en": "Start light loop around button",
-    "nl": "Start lichtloop rond knop",
-    "es": "Iniciar animación de luz alrededor del botón"
+    "en": "Start light loop around action button",
+    "nl": "Start lichtloop rond actieknop",
+    "es": "Iniciar animación de luz alrededor del botón de acción"
   },
   "titleFormatted": {
     "en": "Start light loop around [[button]] for [[duration]] seconds in [[color]]",
     "nl": "Start lichtloop rond [[button]] gedurende [[duration]] seconden in [[color]]",
     "es": "Iniciar animación de luz alrededor de [[button]] durante [[duration]] segundos en [[color]]"
+  },
+  "hint": {
+    "nl": "Alleen beschikbaar voor actieknoppen. Ja/Nee-knoppen gebruiken de statusindicator. Start lichtloop stop lopende vulanimatie.",
+    "en": "Only available for action buttons. Yes/No buttons use the status indicator. Start light run stop ongoing fill animation.",
+    "es": "Solo disponible para botones de acción. Los botones Sí/No utilizan el indicador de estado. Iniciar bucle de luz, detener animación de relleno en curso."
   },
   "args": [
     {

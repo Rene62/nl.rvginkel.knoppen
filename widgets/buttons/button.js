@@ -8,6 +8,7 @@ class Button {
         type = 'action',
         text = 'Knop',
         width = 'small',
+        shape = 'pill',
         enabled = true,
         textAlign = 'center',
 
@@ -30,6 +31,7 @@ class Button {
         this.type = type;
         this.text = text;
         this.width = width;
+        this.shape = shape === 'rounded' ? 'rounded' : 'pill';
         this.enabled = enabled;
         this.textAlign =
             textAlign === 'left'
@@ -71,6 +73,7 @@ class Button {
             type: this.type,
             text: this.text,
             width: this.width,
+            shape: this.shape,
             enabled: this.enabled,
             actionValue: this.actionValue,
             permanentColorEnabled: this.permanentColorEnabled,

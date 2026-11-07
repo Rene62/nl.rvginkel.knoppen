@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Stop fill animation of action button",
+    "nl": "Stop vulanimatie van actieknop",
+    "es": "Detener animación de relleno del botón de acción"
+  },
+  "titleFormatted": {
+    "en": "Stop fill animation of [[button]]",
+    "nl": "Stop vulanimatie van [[button]]",
+    "es": "Detener animación de relleno de [[button]]"
+  },
+  "hint": {
+    "en": "Stops the fill animation immediately and clears the fill. Only for action buttons.",
+    "nl": "Stopt de vulanimatie direct en maakt de knop weer leeg. Alleen voor actieknoppen.",
+    "es": "Detiene inmediatamente la animación y elimina el relleno. Solo para botones de acción."
+  },
+  "args": [
+    {
+      "name": "button",
+      "type": "autocomplete",
+      "title": {
+        "en": "Button",
+        "nl": "Knop",
+        "es": "Botón"
+      }
+    }
+  ]
+}

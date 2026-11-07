@@ -1,13 +1,18 @@
 {
   "title": {
-    "en": "Set permanent button color",
-    "nl": "Stel permanente kleur van knop in",
-    "es": "Establecer color permanente del botón"
+    "en": "Set permanent border color of action button",
+    "nl": "Stel permanente randkleur van actieknop in",
+    "es": "Establecer color permanente del borde del botón de acción"
   },
   "titleFormatted": {
     "en": "Set permanent color of [[button]] to [[enabled]] in [[color]]",
     "nl": "Stel permanente kleur van [[button]] [[enabled]] in [[color]]",
     "es": "Establecer el color permanente de [[button]] en [[color]]: [[enabled]]"
+  },
+  "hint": {
+    "nl": "Alleen beschikbaar voor actieknoppen. Ja/Nee-knoppen gebruiken de statusindicator.",
+    "en": "Only available for action buttons. Yes/No buttons use the status indicator.",
+    "es": "Solo disponible para botones de acción. Los botones Sí/No utilizan el indicador de estado."
   },
   "args": [
     {

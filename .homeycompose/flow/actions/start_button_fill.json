@@ -1,0 +1,48 @@
+{
+  "title": {
+    "en": "Start fill animation of action button",
+    "nl": "Start vulanimatie van actieknop",
+    "es": "Iniciar animación de relleno del botón de acción"
+  },
+  "titleFormatted": {
+    "en": "Fill [[button]] for [[duration]] seconds in [[color]]",
+    "nl": "Laat [[button]] vollopen in [[duration]] seconden met [[color]]",
+    "es": "Rellenar [[button]] durante [[duration]] segundos en [[color]]"
+  },
+  "hint": {
+    "en": "Only action buttons. Duration: 5–20 seconds for narrow buttons, 5–45 seconds for wide buttons. The fill disappears automatically at the end; the light loop stops when filling begins.",
+    "nl": "Alleen actieknoppen. Duur: 5–20 seconden voor smalle knoppen, 5–45 seconden voor brede knoppen. De vulling verdwijnt vanzelf na afloop; de lichtloop stopt zodra de vulling start.",
+    "es": "Solo botones de acción. Duración: 5–20 segundos para botones estrechos y 5–45 segundos para botones anchos. El relleno desaparece automáticamente; la animación de luz se detiene al comenzar."
+  },
+  "args": [
+    {
+      "name": "button",
+      "type": "autocomplete",
+      "title": {
+        "en": "Button",
+        "nl": "Knop",
+        "es": "Botón"
+      }
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "title": {
+        "en": "Duration (seconds)",
+        "nl": "Duur (seconden)",
+        "es": "Duración (segundos)"
+      },
+      "min": 5,
+      "max": 45
+    },
+    {
+      "name": "color",
+      "type": "color",
+      "title": {
+        "en": "Fill color",
+        "nl": "Vulkleur",
+        "es": "Color de relleno"
+      }
+    }
+  ]
+}

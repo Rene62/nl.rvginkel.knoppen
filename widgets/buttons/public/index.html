@@ -20,6 +20,90 @@
                 document.getElementById('buttonContainer');
 
 
+            // Vulanimatie: uitsluitend actieknoppen. De vulstand wordt
+            // bewust niet opgeslagen; na afloop is de knop weer normaal.
+            function findActionButton(buttonId) {
+                const buttonElement = Array.from(
+                    buttonContainer.querySelectorAll('[data-button-id]')
+                ).find(element => element.dataset.buttonId === String(buttonId));
+
+                return buttonElement?.dataset.buttonType === 'action'
+                    ? buttonElement
+                    : null;
+            }
+
+            function stopFill(buttonElement) {
+                if (!buttonElement) return;
+                buttonElement._fillRunId = (buttonElement._fillRunId || 0) + 1;
+                if (buttonElement._fillFrame) {
+                    cancelAnimationFrame(buttonElement._fillFrame);
+                    buttonElement._fillFrame = null;
+                }
+                const fill = buttonElement.querySelector('.button-fill');
+                if (fill) {
+                    fill.style.display = 'none';
+                    const bar = fill.querySelector('.button-fill-bar');
+                    if (bar) bar.style.transform = 'scaleX(0)';
+                }
+            }
+
+            function stopLightloop(buttonElement) {
+                buttonElement._lightloopRunId =
+                    (buttonElement._lightloopRunId || 0) + 1;
+                buttonElement.querySelectorAll('.lightloop-path').forEach(path => {
+                    path.style.display = 'none';
+                });
+                buttonElement.dataset.lightloopActive = 'false';
+                const permanentPath = buttonElement.querySelector('.permanent-path');
+                if (permanentPath) {
+                    permanentPath.style.display =
+                        permanentPath.dataset.enabled === 'true' ? '' : 'none';
+                }
+            }
+
+            function startFill(data) {
+                const buttonElement = findActionButton(data?.buttonId);
+                if (!buttonElement) return;
+
+                const duration = Number(data.duration);
+                if (!Number.isFinite(duration) || duration < 5) return;
+                const maxDuration = buttonElement.classList.contains('button-large')
+                    ? 45 : 20;
+                if (duration > maxDuration) return;
+
+                stopFill(buttonElement);
+                stopLightloop(buttonElement);
+
+                const fill = buttonElement.querySelector('.button-fill');
+                const bar = fill?.querySelector('.button-fill-bar');
+                if (!bar) return;
+
+                bar.style.backgroundColor = data.color || '#00aeee';
+                bar.style.transform = 'scaleX(0)';
+                fill.style.display = '';
+
+                const runId = buttonElement._fillRunId;
+                const startTime = performance.now();
+                const totalMs = duration * 1000;
+
+                function animate(now) {
+                    if (buttonElement._fillRunId !== runId) return;
+                    const fraction = Math.min(1, (now - startTime) / totalMs);
+                    bar.style.transform = `scaleX(${fraction})`;
+                    if (fraction >= 1) {
+                        stopFill(buttonElement);
+                        return;
+                    }
+                    buttonElement._fillFrame = requestAnimationFrame(animate);
+                }
+                buttonElement._fillFrame = requestAnimationFrame(animate);
+            }
+
+            Homey.on('buttonFillStart', startFill);
+            Homey.on('buttonFillStop', data => {
+                stopFill(findActionButton(data?.buttonId));
+            });
+
             Homey.on(
                 'buttonPermanentColorChanged',
                 data => {
@@ -78,6 +162,12 @@
                     if (!buttonElement) {
                         return;
                     }
+
+                    // Animaties zijn wederzijds exclusief.
+                    stopFill(buttonElement);
+                    const lightloopRunId =
+                        (buttonElement._lightloopRunId || 0) + 1;
+                    buttonElement._lightloopRunId = lightloopRunId;
 
                     const permanentPath =
                         buttonElement.querySelector(
@@ -157,6 +247,9 @@
                     );
 
                     function animateLightloop(now) {
+                        if (buttonElement._lightloopRunId !== lightloopRunId) {
+                            return;
+                        }
 
                         const elapsed =
                             now - startTime;
@@ -427,14 +520,29 @@
                         );
 
                     } else {
+                        const fill = document.createElement('span');
+                        fill.className = 'button-fill';
+                        fill.style.display = 'none';
+                        const fillBar = document.createElement('span');
+                        fillBar.className = 'button-fill-bar';
+                        fill.appendChild(fillBar);
+                        buttonElement.appendChild(fill);
 
-                        buttonElement.textContent =
+                        const actionLabel = document.createElement('span');
+                        actionLabel.className = 'action-button-label';
+                        actionLabel.textContent =
                             button.text || Homey.__('widget.button_fallback');
+                        buttonElement.appendChild(actionLabel);
                     }
 
+                    buttonElement.dataset.buttonType = button.type;
                     buttonElement.classList.add(
                         'panel-button'
                     );
+
+                    if (button.shape === 'rounded') {
+                        buttonElement.classList.add('button-rounded');
+                    }
 
                     const lightloopSvg =
                         document.createElementNS(
@@ -896,7 +1004,11 @@
                         `0 0 ${buttonWidth} ${buttonHeight}`
                     );
 
-                    const inset = 1.5;
+                    // Bij de afgeronde-hoeken-variant ligt de randlijn
+                    // dichter bij de buitencontour van de knop.
+                    // De pilvorm behoudt exact zijn bestaande geometrie.
+                    const inset =
+                        button.shape === 'rounded' ? 0.9 : 1.5;
 
                     const left =
                         inset;
@@ -910,19 +1022,27 @@
                     const bottom =
                         buttonHeight - inset;
 
+                    // CSS gebruikt een buitenradius van 12px. De SVG-lijn
+                    // volgt die contour op de hartlijn van de stroke.
                     const radius =
-                        (bottom - top) / 2;
+                        button.shape === 'rounded'
+                            ? Math.min(12 - inset, (bottom - top) / 2)
+                            : (bottom - top) / 2;
 
                     const centerY =
                         buttonHeight / 2;
 
+                    // Hetzelfde SVG-pad voor permanente rand én lightloop.
+                    // De lightloop-animatie zelf blijft ongewijzigd.
                     const pathData = [
                         `M ${left + radius} ${top}`,
                         `H ${right - radius}`,
-                        `A ${radius} ${radius} 0 0 1 ${right} ${centerY}`,
+                        `A ${radius} ${radius} 0 0 1 ${right} ${top + radius}`,
+                        `V ${bottom - radius}`,
                         `A ${radius} ${radius} 0 0 1 ${right - radius} ${bottom}`,
                         `H ${left + radius}`,
-                        `A ${radius} ${radius} 0 0 1 ${left} ${centerY}`,
+                        `A ${radius} ${radius} 0 0 1 ${left} ${bottom - radius}`,
+                        `V ${top + radius}`,
                         `A ${radius} ${radius} 0 0 1 ${left + radius} ${top}`,
                         'Z'
                     ].join(' ');

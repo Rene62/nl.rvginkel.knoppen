@@ -15,7 +15,7 @@
     "type": "Type",
     "type_action": "Action",
     "type_boolean": "Yes/No",
-    "text": "Text",
+    "text": "Button text",
     "width": "Width",
     "width_small": "Small",
     "width_large": "Large",
@@ -34,7 +34,10 @@
     "save_error": "Failed to save the button.",
     "save_success": "Button saved.",
     "new_button_default": "New button",
-    "create_error": "Failed to create the button."
+    "create_error": "Failed to create the button.",
+    "button_shape": "Button shape",
+    "button_shape_pill": "Pill-shaped",
+    "button_shape_rounded": "Rounded corners"
   },
   "widget": {
     "add_button": "Add a button",
@@ -63,6 +66,8 @@
     "invalid_buttons_object": "ButtonStore.save expects a Buttons object",
     "better_logic_unavailable": "Better Logic is not available",
     "invalid_boolean_value": "booleanValue must be true or false",
-    "not_flow_status_button": "Button \"__name__\" does not use Flow as its status source"
+    "not_flow_status_button": "Button \"__name__\" does not use Flow as its status source",
+    "invalid_button_shape": "Invalid button shape: \"__shape__\"",
+    "invalid_fill_duration": "Fill animation for button \"__name__\": choose a duration from 5 to __max__ seconds."
   }
 }

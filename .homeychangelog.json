@@ -10,5 +10,10 @@
     "en": "Added Better Logic and Flow as status sources for Yes/No buttons, selectable text alignment, a Flow card to set the Yes/No status, and Spanish language support. Various minor improvements.",
     "nl": "Better Logic en Flow toegevoegd als statusbron voor Ja/Nee-knoppen, instelbare tekstuitlijning, een Flow-kaart om de Ja/Nee-status in te stellen en ondersteuning voor Spaans. Diverse kleine verbeteringen.",
     "es": "Se añadieron Better Logic y Flow como fuentes de estado para los botones Sí/No, alineación de texto configurable, una tarjeta de Flow para establecer el estado Sí/No y compatibilidad con español. Varias mejoras menores."
+  },
+  "1.3.0": {
+    "en": "Added an animated fill for action buttons, controllable through Flow cards with adjustable duration and fill color. The fill animation and rotating light effect automatically stop each other when the other starts. Added the option to choose between fully rounded (pill-shaped) buttons and buttons with rounded corners.",
+    "nl": "Vulanimatie voor actieknoppen toegevoegd, aanstuurbaar via Flow-kaarten met instelbare duur en vulkleur. De vulanimatie en lichtloop stoppen elkaar automatisch wanneer de andere wordt gestart. Ook toegevoegd: keuze tussen volledig afgeronde knoppen en knoppen met afgeronde hoeken.",
+    "es": "Se añadió una animación de relleno para los botones de acción, controlable mediante tarjetas de Flow con duración y color configurables. La animación de relleno y el efecto de luz giratoria se detienen mutuamente al iniciarse el otro. También se añadió la opción de elegir entre botones completamente redondeados (en forma de píldora) y botones con esquinas redondeadas."
   }
 }

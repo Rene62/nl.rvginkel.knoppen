@@ -408,6 +408,20 @@
 
                 fieldset.appendChild(widthGroup);
 
+                // Knopvorm: geldt voor zowel actie- als Ja/Nee-knoppen.
+                const shapeGroup = document.createElement('div');
+                shapeGroup.className = 'homey-form-group';
+                shapeGroup.innerHTML = `
+    <label class="homey-form-label">${Homey.__('settings.button_shape')}</label>
+    <select class="homey-form-select shape-input">
+        <option value="pill">${Homey.__('settings.button_shape_pill')}</option>
+        <option value="rounded">${Homey.__('settings.button_shape_rounded')}</option>
+    </select>
+`;
+                const shapeInput = shapeGroup.querySelector('.shape-input');
+                shapeInput.value = button.shape || 'pill';
+                fieldset.appendChild(shapeGroup);
+
                 /*
   * TEKSTUITLIJNING
   */
@@ -720,6 +734,9 @@
 
                                 width:
                                     widthInput.value,
+
+                                shape:
+                                    shapeInput.value,
 
                                 textAlign:
                                     typeInput.value === 'boolean'

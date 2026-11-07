@@ -15,7 +15,7 @@
     "type": "Tipo",
     "type_action": "Acción",
     "type_boolean": "Sí/No",
-    "text": "Texto",
+    "text": "Texto del botón",
     "width": "Anchura",
     "width_small": "Estrecho",
     "width_large": "Ancho",
@@ -34,7 +34,10 @@
     "save_error": "No se ha podido guardar el botón.",
     "save_success": "Botón guardado.",
     "new_button_default": "Nuevo botón",
-    "create_error": "No se ha podido crear el botón."
+    "create_error": "No se ha podido crear el botón.",
+    "button_shape": "Forma del botón",
+    "button_shape_pill": "Completamente redondeado",
+    "button_shape_rounded": "Esquinas redondeadas"
   },
   "widget": {
     "add_button": "Añadir un botón",
@@ -63,6 +66,8 @@
     "invalid_buttons_object": "ButtonStore.save espera un objeto Buttons",
     "better_logic_unavailable": "Better Logic no está disponible",
     "invalid_boolean_value": "booleanValue debe ser true o false",
-    "not_flow_status_button": "El botón \"__name__\" no usa Flow como fuente de estado"
+    "not_flow_status_button": "El botón \"__name__\" no usa Flow como fuente de estado",
+    "invalid_button_shape": "Forma de botón no válida: \"__shape__\"",
+    "invalid_fill_duration": "Animación de relleno para el botón \"__name__\": elige una duración de 5 a __max__ segundos."
   }
 }
