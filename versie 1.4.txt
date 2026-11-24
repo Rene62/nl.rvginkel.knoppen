@@ -1,0 +1,2 @@
+blad instellingen compacter gemaakt.
+Hoogte instelling aangepast zodat er niet meer ruimte aan de ondrkant wordt bepaald bij meerdere rijen knoppen

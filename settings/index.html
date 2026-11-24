@@ -8,17 +8,46 @@
     </script>
 
     <style>
-        .button-title-row {
+        * { box-sizing: border-box; }
+        .button-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            padding: 10px 0 12px;
+            background: var(--homey-background-color, #fff);
+        }
+        .button-list { display: flex; flex-direction: column; gap: 6px; }
+        .button-list-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            box-sizing: border-box;
+            gap: 12px;
+            min-height: 48px;
+            padding: 8px 10px;
+            border: 1px solid var(--homey-color-mono-100, #ddd);
+            border-radius: 9px;
         }
-
-        .button-delete {
-            margin-left: 16px;
+        .button-number { width: 32px; flex: 0 0 32px; text-align: right; opacity: .7; }
+        .button-list-text { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+        .button-icon-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border: 0;
+            border-radius: 8px;
+            color: var(--homey-text-color, inherit);
+            background: transparent;
+            cursor: pointer;
         }
+        .button-icon-action:hover { background: var(--homey-color-mono-050, rgba(127,127,127,.15)); }
+        .button-icon-action:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+        .button-icon-action:disabled { opacity: .4; cursor: default; }
+        .button-icon-action svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .editor-header { margin-bottom: 18px; }
+        .editor-actions { display: flex; gap: 10px; margin-top: 18px; }
+        .editor-actions button { flex: 1; min-width: 0; }
+        [hidden] { display: none !important; }
     </style>
 
 </head>
@@ -35,13 +64,17 @@
 
 
 
-    <div id="buttonList" data-i18n="settings.loading_buttons">
-    </div>
+    <section id="listView">
+        <div class="button-toolbar">
+            <button id="addButton" type="button" class="homey-button-primary-full" data-i18n="settings.new_button"></button>
+        </div>
+        <div id="buttonList" class="button-list" data-i18n="settings.loading_buttons"></div>
+    </section>
 
-    <div class="homey-form-group">
-        <button id="addButton" class="homey-button-primary-full" data-i18n="settings.new_button">
-        </button>
-    </div>
+    <section id="editorView" hidden>
+        <h2 id="editorTitle" class="homey-title editor-header"></h2>
+        <div id="editorContent"></div>
+    </section>
 
     <script>
 
@@ -53,6 +86,79 @@
 
             const addButton =
                 document.getElementById('addButton');
+            const listView = document.getElementById('listView');
+            const editorView = document.getElementById('editorView');
+            const editorContent = document.getElementById('editorContent');
+            const editorTitle = document.getElementById('editorTitle');
+            const iconMarkup = {
+                edit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L9 17l-4 1 1-4Z"/></svg>',
+                delete: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6M10 10v7m4-7v7"/></svg>'
+            };
+
+            function closeEditor() {
+                editorContent.replaceChildren();
+                editorView.hidden = true;
+                listView.hidden = false;
+            }
+
+            function openEditor(button) {
+                editorContent.replaceChildren();
+                listView.hidden = true;
+                editorView.hidden = false;
+                editorTitle.textContent = button
+                    ? Homey.__('settings.edit_button_title', { number: button.number })
+                    : Homey.__('settings.add_button_title');
+                createButtonEditor(button);
+                window.scrollTo(0, 0);
+            }
+
+            function makeIconButton(kind, label) {
+                const element = document.createElement('button');
+                element.type = 'button';
+                element.className = 'button-icon-action';
+                element.innerHTML = iconMarkup[kind];
+                element.setAttribute('aria-label', label);
+                element.title = label;
+                return element;
+            }
+
+            function renderButtonList(buttons) {
+                buttonList.replaceChildren();
+                if (!Array.isArray(buttons) || !buttons.length) {
+                    buttonList.textContent = Homey.__('settings.no_buttons');
+                    return;
+                }
+                buttons.slice().sort((a, b) => a.number - b.number).forEach(button => {
+                    const row = document.createElement('div');
+                    row.className = 'button-list-row';
+                    const number = document.createElement('span');
+                    number.className = 'button-number';
+                    number.textContent = String(button.number);
+                    const text = document.createElement('span');
+                    text.className = 'button-list-text';
+                    text.textContent = button.text || Homey.__('settings.button_fallback');
+                    const edit = makeIconButton('edit', Homey.__('settings.edit'));
+                    edit.addEventListener('click', () => openEditor(button));
+                    const remove = makeIconButton('delete', Homey.__('settings.delete'));
+                    remove.addEventListener('click', async () => {
+                        const confirmed = await Homey.confirm(Homey.__('settings.delete_confirm', {
+                            name: button.text || Homey.__('settings.button_fallback')
+                        }));
+                        if (!confirmed) return;
+                        remove.disabled = true;
+                        Homey.api('DELETE', `/buttons?id=${encodeURIComponent(button.id)}`, null, error => {
+                            if (error) {
+                                remove.disabled = false;
+                                Homey.alert(Homey.__('settings.delete_error', { error: error.message || error }));
+                                return;
+                            }
+                            loadButtons();
+                        });
+                    });
+                    row.append(number, text, edit, remove);
+                    buttonList.appendChild(row);
+                });
+            }
 
             let booleanVariables = [];
             let betterLogicBooleanVariables = [];
@@ -180,24 +286,7 @@
                                 return;
                             }
 
-                            if (
-                                !Array.isArray(buttons) ||
-                                buttons.length === 0
-                            ) {
-
-                                buttonList.textContent =
-                                    Homey.__(
-                                        'settings.no_buttons'
-                                    );
-
-                                return;
-                            }
-
-                            buttonList.innerHTML = '';
-
-                            buttons.forEach(button => {
-                                createButtonEditor(button);
-                            });
+                            renderButtonList(buttons);
                         }
                     );
                 }
@@ -208,108 +297,20 @@
              * Editor voor één knop maken
              */
             function createButtonEditor(button) {
+                const isNew = !button;
+                button = button || {
+                    type: 'action',
+                    text: Homey.__('settings.new_button_default'),
+                    width: 'small',
+                    shape: 'pill',
+                    textAlign: 'center',
+                    actionValue: '',
+                    variableSource: 'homey',
+                    variableId: null
+                };
 
-                const fieldset =
-                    document.createElement('fieldset');
-
-                fieldset.className =
-                    'homey-form-fieldset';
-
-
-                /*
-                 * Titel
-                 */
-                const titleRow =
-                    document.createElement('div');
-
-                titleRow.className =
-                    'button-title-row';
-
-
-                const legendText =
-                    document.createElement('span');
-
-                legendText.className =
-                    'homey-form-legend';
-
-                legendText.textContent =
-                    Homey.__(
-                        'settings.button_name',
-                        {
-                            number: button.number,
-                            text:
-                                button.text ||
-                                Homey.__('settings.button_fallback')
-                        }
-                    );
-
-
-                const deleteButton =
-                    document.createElement('button');
-
-                deleteButton.type = 'button';
-                deleteButton.textContent =
-                    Homey.__('settings.delete');
-                deleteButton.className = 'button-delete';
-
-                deleteButton.addEventListener(
-                    'click',
-                    async function () {
-
-                        const confirmed = await Homey.confirm(
-                            Homey.__(
-                                'settings.delete_confirm',
-                                {
-                                    name:
-                                        button.text ||
-                                        Homey.__('settings.button_fallback')
-                                }
-                            )
-                        );
-
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        deleteButton.disabled = true;
-
-                        Homey.api(
-                            'DELETE',
-                            `/buttons?id=${encodeURIComponent(button.id)}`,
-                            null,
-                            function (error) {
-
-                                if (error) {
-                                    deleteButton.disabled = false;
-
-                                    console.error(
-                                        'Fout bij verwijderen knop:',
-                                        error
-                                    );
-
-                                    Homey.alert(
-                                        Homey.__(
-                                            'settings.delete_error',
-                                            {
-                                                error: error.message || error
-                                            }
-                                        )
-                                    );
-
-                                    return;
-                                }
-
-                                fieldset.remove();
-                            }
-                        );
-                    }
-                );
-
-                titleRow.appendChild(legendText);
-                titleRow.appendChild(deleteButton);
-
-                fieldset.appendChild(titleRow);
-
+                const fieldset = document.createElement('fieldset');
+                fieldset.className = 'homey-form-fieldset';
 
                 /*
                  * TYPE
@@ -682,8 +683,8 @@
                 const saveButton =
                     document.createElement('button');
 
-                saveButton.className =
-                    'homey-button-primary-full';
+                saveButton.className = 'homey-button-primary';
+                saveButton.type = 'button';
 
                 saveButton.textContent =
                     Homey.__('settings.save');
@@ -721,10 +722,10 @@
                         saveButton.disabled = true;
 
                         Homey.api(
-                            'PUT',
+                            isNew ? 'POST' : 'PUT',
                             '/buttons',
                             {
-                                id: button.id,
+                                ...(isNew ? {} : { id: button.id }),
 
                                 type:
                                     typeInput.value,
@@ -785,87 +786,28 @@
                                     return;
                                 }
 
-                                changes = false;
-                                saveButton.textContent =
-                                    Homey.__('settings.save');
-
-                                legendText.textContent =
-                                    Homey.__(
-                                        'settings.button_name',
-                                        {
-                                            number: updatedButton.number,
-                                            text:
-                                                updatedButton.text ||
-                                                Homey.__('settings.button_fallback')
-                                        }
-                                    );
-                                /*
-                                 * Opnieuw laden zodat we
-                                 * daadwerkelijk de opgeslagen
-                                 * waarden tonen.
-                                 */
-                                Homey.alert(
-                                    Homey.__('settings.save_success')
-                                );
-
-
+                                closeEditor();
+                                loadButtons();
                             }
                         );
                     }
                 );
 
 
-                fieldset.appendChild(saveButton);
+                const cancelButton = document.createElement('button');
+                cancelButton.type = 'button';
+                cancelButton.className = 'homey-button-secondary';
+                cancelButton.textContent = Homey.__('settings.cancel');
+                cancelButton.addEventListener('click', closeEditor);
 
-                buttonList.appendChild(fieldset);
+                const actions = document.createElement('div');
+                actions.className = 'editor-actions';
+                actions.append(cancelButton, saveButton);
+                fieldset.appendChild(actions);
+                editorContent.appendChild(fieldset);
             }
 
-
-            /*
-             * NIEUWE KNOP
-             */
-            addButton.addEventListener(
-                'click',
-                function () {
-
-                    addButton.disabled = true;
-
-                    Homey.api(
-                        'POST',
-                        '/buttons',
-                        {
-                            type: 'action',
-                            text: Homey.__(
-                                'settings.new_button_default'
-                            ),
-                            width: 'small',
-                            actionValue: ''
-                        },
-
-                        function (error, button) {
-
-                            addButton.disabled = false;
-
-                            if (error) {
-
-                                console.error(
-                                    'Fout bij aanmaken knop:',
-                                    error
-                                );
-
-                                Homey.alert(
-                                    Homey.__('settings.create_error')
-                                );
-
-                                return;
-                            }
-
-
-                            createButtonEditor(button);
-                        }
-                    );
-                }
-            );
+            addButton.addEventListener('click', () => openEditor(null));
 
 
             /*

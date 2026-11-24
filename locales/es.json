@@ -37,11 +37,16 @@
     "create_error": "No se ha podido crear el botón.",
     "button_shape": "Forma del botón",
     "button_shape_pill": "Completamente redondeado",
-    "button_shape_rounded": "Esquinas redondeadas"
+    "button_shape_rounded": "Esquinas redondeadas",
+    "edit": "Editar",
+    "cancel": "Cancelar",
+    "add_button_title": "Añadir botón",
+    "edit_button_title": "Editar botón __number__"
   },
   "widget": {
     "add_button": "Añadir un botón",
-    "button_fallback": "Botón"
+    "button_fallback": "Botón",
+    "error": "Error al cargar los botones: __message__"
   },
   "autocomplete": {
     "button_name": "Botón __number__: __text__",

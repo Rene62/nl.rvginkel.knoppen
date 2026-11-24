@@ -1142,9 +1142,16 @@
                     rows++;
                 }
 
-                Homey.ready({
-                    height: rows * 58
-                });
+                // Hoogte van de werkelijke knoppen plus tussenruimte en body-padding.
+                // Homey.ready stelt de initiele hoogte in; setHeight vraagt Homey
+                // expliciet de hoogte van deze bestaande widget te actualiseren.
+                const contentHeight = rows * 42 + Math.max(0, rows - 1) * 8 + 10;
+                Homey.ready({ height: contentHeight });
+                if (typeof Homey.setHeight === 'function') {
+                    Promise.resolve(Homey.setHeight(contentHeight)).catch(error => {
+                        console.warn('Widgethoogte bijwerken mislukt:', error);
+                    });
+                }
             } catch (error) {
 
                 console.error(

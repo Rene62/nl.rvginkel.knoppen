@@ -15,5 +15,10 @@
     "en": "Added an animated fill for action buttons, controllable through Flow cards with adjustable duration and fill color. The fill animation and rotating light effect automatically stop each other when the other starts. Added the option to choose between fully rounded (pill-shaped) buttons and buttons with rounded corners.",
     "nl": "Vulanimatie voor actieknoppen toegevoegd, aanstuurbaar via Flow-kaarten met instelbare duur en vulkleur. De vulanimatie en lichtloop stoppen elkaar automatisch wanneer de andere wordt gestart. Ook toegevoegd: keuze tussen volledig afgeronde knoppen en knoppen met afgeronde hoeken.",
     "es": "Se añadió una animación de relleno para los botones de acción, controlable mediante tarjetas de Flow con duración y color configurables. La animación de relleno y el efecto de luz giratoria se detienen mutuamente al iniciarse el otro. También se añadió la opción de elegir entre botones completamente redondeados (en forma de píldora) y botones con esquinas redondeadas."
+  },
+  "1.4.0": {
+    "en": "Redesigned button settings with a compact list, separate add/edit screen, and larger edit/delete icons. Improved automatic widget height to reduce excess bottom spacing when using multiple button rows.",
+    "nl": "Knopinstellingen vernieuwd met een compacte lijst, een apart scherm voor toevoegen en bewerken en grotere bewerk- en verwijdericonen. Automatische widgethoogte verbeterd om overtollige ruimte onder meerdere knoppenrijen te verminderen.",
+    "es": "Se ha renovado la configuración de los botones con una lista compacta, una pantalla independiente para añadir y editar, e iconos de edición y eliminación más grandes. Se ha mejorado la altura automática del widget para reducir el espacio sobrante debajo de varias filas de botones."
   }
 }

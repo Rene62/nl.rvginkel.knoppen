@@ -37,11 +37,16 @@
     "create_error": "Failed to create the button.",
     "button_shape": "Button shape",
     "button_shape_pill": "Pill-shaped",
-    "button_shape_rounded": "Rounded corners"
+    "button_shape_rounded": "Rounded corners",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "add_button_title": "Add button",
+    "edit_button_title": "Edit button __number__"
   },
   "widget": {
     "add_button": "Add a button",
-    "button_fallback": "Button"
+    "button_fallback": "Button",
+    "error": "Error loading buttons: __message__"
   },
   "autocomplete": {
     "button_name": "Button __number__: __text__",

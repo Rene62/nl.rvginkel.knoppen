@@ -37,11 +37,16 @@
     "create_error": "Aanmaken van de knop is mislukt.",
     "button_shape": "Knopvorm",
     "button_shape_pill": "Volledig afgerond",
-    "button_shape_rounded": "Afgeronde hoeken"
+    "button_shape_rounded": "Afgeronde hoeken",
+    "edit": "Bewerken",
+    "cancel": "Annuleren",
+    "add_button_title": "Knop toevoegen",
+    "edit_button_title": "Knop __number__ bewerken"
   },
   "widget": {
     "add_button": "Voeg een knop toe",
-    "button_fallback": "Knop"
+    "button_fallback": "Knop",
+    "error": "Fout bij laden van knoppen: __message__"
   },
   "autocomplete": {
     "button_name": "Knop __number__: __text__",
